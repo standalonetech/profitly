@@ -1,0 +1,11 @@
+parameters:
+	level: 6
+	paths:
+		- src/
+	bootstrapFiles:
+		- profitpress.php
+	scanFiles:
+		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon

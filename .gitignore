@@ -1,0 +1,21 @@
+# Dependencies
+/vendor/
+/node_modules/
+
+# Composer
+composer.lock
+
+# Build & test artifacts
+/build/
+.phpunit.result.cache
+coverage/
+
+# Editor / OS
+.idea/
+.vscode/
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

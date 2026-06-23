@@ -1,0 +1,182 @@
+/**
+ * ProfitPress reports + dashboard widget styles.
+ *
+ * Only declares what WooCommerce/WP admin CSS does not already provide: the
+ * KPI card grid, the side-by-side tables, delta colouring, and widget layout.
+ */
+
+/* Date range selector */
+.profitpress-range-selector {
+	margin: 16px 0 20px;
+	display: flex;
+	gap: 6px;
+}
+
+/* Empty state */
+.profitpress-empty-state {
+	padding: 32px;
+	text-align: center;
+	color: #50575e;
+	font-size: 14px;
+}
+
+/* Summary cards */
+.profitpress-cards {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 16px;
+	margin-bottom: 24px;
+}
+
+@media screen and (max-width: 1100px) {
+	.profitpress-cards {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media screen and (max-width: 600px) {
+	.profitpress-cards {
+		grid-template-columns: 1fr;
+	}
+}
+
+.profitpress-card {
+	padding: 16px 18px;
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+}
+
+.profitpress-card__label {
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #646970;
+	margin-bottom: 6px;
+}
+
+.profitpress-card__value {
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.2;
+	color: #1d2327;
+}
+
+.profitpress-card__period {
+	font-size: 12px;
+	color: #646970;
+	margin: 4px 0 8px;
+}
+
+/* Deltas */
+.profitpress-delta {
+	font-weight: 600;
+	font-size: 12px;
+}
+
+.profitpress-delta-up {
+	color: #1a7f37;
+}
+
+.profitpress-delta-down {
+	color: #b32d2e;
+}
+
+.profitpress-delta-neutral {
+	color: #646970;
+}
+
+.profitpress-delta-label {
+	color: #646970;
+	font-size: 11px;
+}
+
+/* Tables */
+.profitpress-tables {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px;
+	margin-bottom: 8px;
+}
+
+@media screen and (max-width: 960px) {
+	.profitpress-tables {
+		grid-template-columns: 1fr;
+	}
+}
+
+.profitpress-table-wrap {
+	padding: 16px 18px;
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+}
+
+.profitpress-table-title {
+	font-size: 14px;
+	margin: 0 0 12px;
+}
+
+.profitpress-product-table .profitpress-num {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.profitpress-product-table .profitpress-loss {
+	color: #b32d2e;
+}
+
+.profitpress-table-empty {
+	color: #646970;
+	font-style: italic;
+}
+
+.profitpress-product-footnote {
+	margin: 4px 0 20px;
+}
+
+.profitpress-export {
+	margin-top: 8px;
+}
+
+/* Dashboard widget */
+.profitpress-widget__stats {
+	display: flex;
+	gap: 16px;
+	margin: 0 0 12px;
+	padding: 0;
+	list-style: none;
+}
+
+.profitpress-widget__stats li {
+	flex: 1;
+	margin: 0;
+}
+
+.profitpress-widget__label {
+	display: block;
+	font-size: 11px;
+	text-transform: uppercase;
+	color: #646970;
+}
+
+.profitpress-widget__value {
+	display: block;
+	font-size: 18px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.profitpress-widget__delta {
+	display: block;
+	margin-top: 2px;
+}
+
+.profitpress-widget__top {
+	margin: 8px 0;
+	color: #1d2327;
+}
+
+.profitpress-widget__link {
+	margin: 8px 0 0;
+}

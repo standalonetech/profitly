@@ -1,0 +1,46 @@
+# Files and directories listed here are EXCLUDED from the distributed
+# WordPress.org package (read by `wp dist-archive` and the official
+# "Plugin deploy to WordPress.org" GitHub Action).
+#
+# NOTE: vendor/ is intentionally NOT listed — production dependencies and the
+# Composer autoloader must ship to users, since composer install never runs on
+# their site. Build it with `composer install --no-dev --optimize-autoloader`
+# before packaging so dev tooling (PHPUnit/PHPStan/PHPCS) is left out.
+
+# Version control
+/.git
+/.github
+/.gitignore
+/.gitattributes
+
+# Editor / IDE / OS
+/.editorconfig
+/.idea
+/.vscode
+.DS_Store
+Thumbs.db
+
+# This file itself
+/.distignore
+
+# Dependency manifests (unused by end users)
+/composer.json
+/composer.lock
+/package.json
+/package-lock.json
+/node_modules
+
+# Dev tooling configuration
+/phpcs.xml.dist
+/phpstan.neon.dist
+/phpunit.xml
+/phpunit.xml.dist
+
+# Tests and build artifacts
+/tests
+/build
+/.phpunit.result.cache
+/coverage
+
+# Docs that are for contributors, not end users
+/RELEASING.md
