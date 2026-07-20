@@ -90,22 +90,36 @@ final class SettingsHandler {
 	}
 
 	/**
-	 * Fallback sanitiser registered with the option.
+	 * Sanitiser registered with the option via register_setting().
 	 *
-	 * Our own handler writes the option directly, so this only runs if the option
-	 * is ever saved through the Settings API from elsewhere. It is a safe no-op:
-	 * pass arrays through, fall back to the stored value for anything malformed.
+	 * Our own form handler writes the option directly, so this only runs when the
+	 * option is saved through the Settings API from elsewhere. It runs the incoming
+	 * array through every registered tab's field-level sanitiser and rebuilds a
+	 * clean, known-shape array — dropping unrecognised keys. Non-array input falls
+	 * back to the stored value.
 	 *
 	 * @param mixed $input Raw value being saved.
 	 * @return array<string, mixed>
 	 */
 	public static function sanitize_callback( $input ): array {
-		if ( is_array( $input ) ) {
-			return $input;
+		if ( ! is_array( $input ) ) {
+			$existing = get_option( Constants::OPTION, SettingsRegistry::get_defaults() );
+
+			return is_array( $existing ) ? $existing : SettingsRegistry::get_defaults();
 		}
 
-		$existing = get_option( Constants::OPTION, SettingsRegistry::get_defaults() );
+		// Tabs read input as $input['profitly_settings'][...]; the Settings API
+		// hands us the option value directly, so wrap it to match handle().
+		$wrapped   = array( 'profitly_settings' => $input );
+		$existing  = SettingsRegistry::get_settings();
+		$sanitized = SettingsRegistry::get_defaults();
 
-		return is_array( $existing ) ? $existing : SettingsRegistry::get_defaults();
+		foreach ( SettingsRegistry::get_tabs() as $tab ) {
+			$sanitized = array_replace( $sanitized, $tab->sanitize( $wrapped, $existing ) );
+		}
+
+		$sanitized['_version'] = PROFITLY_VERSION;
+
+		return $sanitized;
 	}
 }

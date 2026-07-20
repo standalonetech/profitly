@@ -95,8 +95,10 @@ Confirm ALL of the following, and report each as a pass/fail line:
 - ✅ `profitly/profitly.php` is present
 - ✅ `profitly/vendor/autoload.php` is present
 - ✅ `profitly/languages/profitly.pot` is present
+- ✅ `profitly/composer.json` is present — WordPress.org plugin review requires it
+  in the package root (PSR-4 autoload map + PHP requirement)
 - ❌ NONE of these leaked in: `tests/`, `phpunit.xml.dist`, `phpcs.xml.dist`,
-  `phpstan.neon.dist`, `composer.json`, `composer.lock`, `.git/`, `.github/`,
+  `phpstan.neon.dist`, `composer.lock`, `.git/`, `.github/`,
   `CLAUDE.md`, `.claude/`, `RELEASING.md`, `README.md` (GitHub-only — WordPress.org
   uses `readme.txt`)
 - ❌ no dev packages under `vendor/` (e.g. `vendor/phpunit`, `vendor/phpstan`,
