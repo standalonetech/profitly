@@ -38,6 +38,9 @@ final class Assets {
 	public function enqueue( string $hook_suffix ): void {
 		switch ( $hook_suffix ) {
 			case 'toplevel_page_' . Menu::SLUG:
+			case Menu::SLUG . '_page_' . Menu::TARGET_SLUG:
+				// The planner reuses the report stylesheet: its cards, tables and
+				// number formatting are the same components.
 				$this->enqueue_reports();
 				break;
 

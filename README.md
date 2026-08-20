@@ -15,6 +15,7 @@ It then turns that data into real profit analytics: a dedicated Reports page wit
 - **COGS data layer** — per-product and per-variation cost fields, plus a product list column.
 - **Profit snapshotting** — COGS, gateway fees, and shipping costs are captured onto each order at the time of sale, so historical profit never changes when prices do.
 - **Reports page** — revenue, net profit, and margin by date range, with best/worst-selling product performance.
+- **Profit Target Planner** — enter the profit you want and see the revenue, orders, and daily pace required to reach it, based on your own historical margin.
 - **Dashboard widget** — at-a-glance profit summary on the WordPress dashboard.
 - **CSV export** — order-level profit data for offline analysis.
 - **Gateway fee accounting** — model per-gateway payment processing fees.

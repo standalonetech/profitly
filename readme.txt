@@ -25,6 +25,7 @@ Profitly fixes that. It captures the true cost behind every order and shows you 
 * **Gross margin at a glance** — See each product's gross margin right in your Products list.
 * **Profit reports** — Today, last 7 days, and last 30 days, with revenue, net profit, order count, and average margin, plus period-over-period comparison.
 * **Top & bottom products** — Instantly see your 10 most profitable products and your 10 loss-making products.
+* **Profit Target Planner** — Enter the profit you want to make and see the revenue, orders, and daily pace needed to get there, based on your own historical margin.
 * **Dashboard widget** — A quick profit snapshot on your WordPress dashboard.
 * **CSV export** — Export your order-level profit data for the last 30 days.
 
@@ -47,6 +48,12 @@ WooCommerce records what your customer *paid* for shipping — that is revenue, 
 * **Included / not applicable** — For digital products or stores where shipping is already in your product cost.
 
 You can also override the shipping cost on any individual order.
+
+= Plan around the profit you want =
+
+The Profit Target Planner (Profitly → Profit Target) works backwards from a profit goal. Pick a planning period (this month, next month, this quarter, or a custom range) and a historical baseline (last 30 days, 90 days, or 12 months), enter your target profit, and Profitly shows the revenue and order count required — plus the daily pace, how that compares with your current trajectory, and how much less revenue you would need at a better margin.
+
+It is a projection from your own Profitly data, not a full business forecast: it does not know about salaries, rent, software, taxes, or financing costs, and Profitly says so on the page.
 
 = Refunds handled correctly =
 

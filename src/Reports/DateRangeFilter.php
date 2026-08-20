@@ -18,7 +18,9 @@ defined( 'ABSPATH' ) || exit;
  *
  * Its single responsibility is turning the `?range=` query argument into a pair of
  * concrete windows: the current period and the equally long period immediately
- * before it (used for "vs previous period" deltas). All dates are computed in the
+ * before it (used for "vs previous period" deltas). The longer windows ('90d',
+ * '12m') exist for the Profit Target Planner's baseline selector; the Reports page
+ * offers its own shorter subset. All dates are computed in the
  * site timezone via {@see wp_timezone()} so the windows line up with how the
  * merchant perceives "today".
  */
@@ -27,7 +29,7 @@ final class DateRangeFilter {
 	/**
 	 * The valid range keys accepted from the request.
 	 */
-	public const RANGES = array( 'today', '7d', '30d' );
+	public const RANGES = array( 'today', '7d', '30d', '90d', '12m' );
 
 	/**
 	 * The default range when none/invalid is supplied.
@@ -123,6 +125,12 @@ final class DateRangeFilter {
 			case '7d':
 				return $midnight->modify( '-7 days' );
 
+			case '90d':
+				return $midnight->modify( '-90 days' );
+
+			case '12m':
+				return $midnight->modify( '-12 months' );
+
 			case '30d':
 			default:
 				return $midnight->modify( '-30 days' );
@@ -143,6 +151,12 @@ final class DateRangeFilter {
 			case '7d':
 				return __( 'Last 7 days', 'profitly' );
 
+			case '90d':
+				return __( 'Last 90 days', 'profitly' );
+
+			case '12m':
+				return __( 'Last 12 months', 'profitly' );
+
 			case '30d':
 			default:
 				return __( 'Last 30 days', 'profitly' );
@@ -162,6 +176,12 @@ final class DateRangeFilter {
 
 			case '7d':
 				return __( 'vs previous 7 days', 'profitly' );
+
+			case '90d':
+				return __( 'vs previous 90 days', 'profitly' );
+
+			case '12m':
+				return __( 'vs previous 12 months', 'profitly' );
 
 			case '30d':
 			default:

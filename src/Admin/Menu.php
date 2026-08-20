@@ -10,6 +10,7 @@ declare( strict_types=1 );
 namespace Profitly\Admin;
 
 use Profitly\Constants;
+use Profitly\Planner\ProfitTargetPage;
 use Profitly\Reports\ReportsPage;
 use Profitly\Settings\SettingsPage;
 
@@ -28,6 +29,11 @@ final class Menu {
 	 * Menu slug of the top-level page (also the Reports sub-page slug).
 	 */
 	public const SLUG = 'profitly';
+
+	/**
+	 * Menu slug of the Profit Target Planner sub-page.
+	 */
+	public const TARGET_SLUG = 'profitly-target';
 
 	/**
 	 * Menu slug of the Settings sub-page.
@@ -78,6 +84,17 @@ final class Menu {
 
 		add_submenu_page(
 			self::SLUG,
+			__( 'Profit Target', 'profitly' ),
+			__( 'Profit Target', 'profitly' ),
+			Constants::CAP_VIEW_REPORTS,
+			self::TARGET_SLUG,
+			static function (): void {
+				( new ProfitTargetPage() )->render();
+			}
+		);
+
+		add_submenu_page(
+			self::SLUG,
 			__( 'Settings', 'profitly' ),
 			__( 'Settings', 'profitly' ),
 			Constants::CAP_MANAGE,
@@ -93,6 +110,15 @@ final class Menu {
 	 */
 	public static function reports_url(): string {
 		return admin_url( 'admin.php?page=' . self::SLUG );
+	}
+
+	/**
+	 * Canonical URL of the Profit Target Planner page.
+	 *
+	 * @return string
+	 */
+	public static function target_url(): string {
+		return admin_url( 'admin.php?page=' . self::TARGET_SLUG );
 	}
 
 	/**

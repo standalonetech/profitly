@@ -24,7 +24,7 @@ Tests live in `tests/` (PSR-4 maps `Profitly\Tests\` → `tests/`), configured b
 `phpunit.xml.dist` with `tests/bootstrap.php`. The bootstrap **defines `ABSPATH` before
 loading the autoloader** — every `src/` class guards itself with `defined( 'ABSPATH' ) || exit;`,
 so without this the file under test would terminate the run. The suite currently covers the
-pure, WordPress-free units (`tests/Unit/`, starting with `COGSCalculator`); WP/WooCommerce-coupled
+pure, WordPress-free units (`tests/Unit/` — `COGSCalculator` and `ProfitTargetCalculator`); WP/WooCommerce-coupled
 classes would need a WP test harness (e.g. wp-phpunit / Brain Monkey) that is not yet set up.
 `composer test` runs PHPUnit; PHPStan scans `src/` only with WooCommerce stubs. After any code
 change, run `composer lint && composer analyze && composer test` before considering the work done;
@@ -96,6 +96,26 @@ present and deliberate). `Reports/ReportCache` caches results; `Reports/DateRang
 range selection; `Reports/ReportsPage` + `Reports/Views/*` render. `Dashboard/DashboardWidget`
 and `Export/CsvExporter` are sibling consumers of the same aggregation layer.
 
+### Profit Target Planner
+`Planner/ProfitTargetCalculator` is the second pure, WordPress-free class in the plugin
+(alongside `COGSCalculator`, which it does all its money math through). It answers "how
+much must I sell to make X profit?" from a baseline it is *given* — it never queries or
+recomputes profit, so "profit" and "margin" mean exactly what `ProfitAggregator` says they
+mean. The identity is `required revenue = target profit / net margin`, then
+`required orders = required revenue / AOV` (rounded **up** — orders are whole, and rounding
+down would plan short). It returns a `status` rather than a number when the answer would be
+meaningless: `no_data` (no baseline orders), `non_positive_margin` (margin ≤ 0, where no
+finite revenue reaches the target), `invalid_target` (missing/zero/negative/over the
+`MAX_TARGET` cap). Baselines under `LOW_SAMPLE_THRESHOLD` (25 orders — a conservative
+choice, there was no prior convention) are flagged `low_sample`.
+`Planner/PlanningPeriod` resolves the *forward-looking* window (this month / next month /
+this quarter / custom, inclusive day count); `Reports/DateRangeFilter` stays the resolver
+for *historical* windows and gained the `90d` / `12m` keys the baseline selector needs.
+`Planner/ProfitTargetPage` is orchestration only: it reads the request, pulls the cached
+baseline aggregation (same `ReportCache`, same key shape as `ReportsPage`), and hands the
+result to `Planner/Views/profit-target-page.php`. All input arrives via GET on a read-only
+screen, so there is no nonce — the same rationale as the report range selector.
+
 ### Capabilities
 Two caps gate everything (`Constants`): `view_woocommerce_reports` for read-only screens
 (`CAP_VIEW_REPORTS`), `manage_woocommerce` for write/settings screens (`CAP_MANAGE`).
@@ -110,6 +130,7 @@ Two caps gate everything (`Constants`): `view_woocommerce_reports` for read-only
 | Gateway fees | `src/Fees/` |
 | Shipping cost resolution | `src/Shipping/` |
 | Reporting & aggregation | `src/Reports/` (+ `Views/`) |
+| Profit Target Planner | `src/Planner/` (+ `Views/`) |
 | Dashboard widget | `src/Dashboard/` |
 | CSV export | `src/Export/` |
 | Settings | `src/Settings/`, `src/Settings/Tabs/` |
