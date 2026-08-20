@@ -31,7 +31,7 @@ final class SettingsRegistry {
 	/**
 	 * Settings schema version stored under the `_version` key.
 	 */
-	public const VERSION = '1.0.1';
+	public const VERSION = '1.0.2';
 
 	/**
 	 * The registered tab classes, in display order.

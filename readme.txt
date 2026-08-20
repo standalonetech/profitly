@@ -4,7 +4,7 @@ Tags: profit, cost of goods, cogs, analytics, woocommerce
 Requires at least: 6.4
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -148,6 +148,9 @@ No. Profit calculations for reports run in the admin area, not on your storefron
 6. Settings — gateway fees, shipping cost model, and general options.
 
 == Changelog ==
+
+= 1.0.2 (Unreleased) =
+* Development in progress.
 
 = 1.0.1 =
 * Renamed the plugin to Profitly.
