@@ -183,95 +183,196 @@
 
 /* Profit Target Planner
  *
- * Everything here is scoped to .profitly-planner so the Reports page keeps its
- * own (roomier) card sizing. The planner is a single-screen calculator, so it
- * trades vertical space for density: one control row, one card row per idea.
+ * Scoped to .profitly-planner to deliver a clean, modern WooCommerce Analytics
+ * design system (elevated cards, crisp typography, tabular figures, and subtle
+ * brand accents).
  */
-.profitly-planner__intro {
-	margin: 2px 0 12px;
-	color: #50575e;
+/* .profitly-planner {
+	max-width: 1400px;
+} */
+
+.profitly-planner__header {
+	margin: 0 0 20px;
 }
 
-/* Control bar: one row, every control bottom-aligned on the same baseline. */
+.profitly-planner__title {
+	font-size: 20px;
+	font-weight: 600;
+	color: #1e1e1e;
+	margin: 0 0 4px;
+	line-height: 1.4;
+}
+
+.profitly-planner__intro {
+	margin: 0;
+	color: #646970;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+/* Control bar: elevated WooCommerce Analytics filter toolbar */
 .profitly-planner__controls {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-end;
-	gap: 10px 16px;
-	padding: 12px 14px;
-	margin-bottom: 20px;
-	background: #fff;
-	border: 1px solid #dcdcde;
+	gap: 16px;
+	padding: 16px 20px;
+	margin-bottom: 24px;
+	background: #ffffff;
+	border: 1px solid #e0e0e0;
 	border-radius: 4px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
 .profitly-planner .profitly-field {
 	display: flex;
 	flex-direction: column;
-	gap: 3px;
+	gap: 6px;
 	margin: 0;
 	border: 0;
 	padding: 0;
 }
 
-.profitly-planner .profitly-field > label,
-.profitly-planner .profitly-field > legend {
+.profitly-planner .profitly-field>label,
+.profitly-planner .profitly-field>legend {
 	padding: 0;
-	font-size: 12px;
+	font-size: 11px;
 	font-weight: 600;
-	color: #1d2327;
-	line-height: 1.4;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	color: #646970;
+	line-height: 1.2;
 }
 
 .profitly-planner .profitly-field input,
 .profitly-planner .profitly-field select {
 	margin: 0;
-	min-height: 30px;
+	height: 36px;
+	line-height: 34px;
+	box-sizing: border-box;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	padding: 0 12px;
+	font-size: 13px;
+	color: #2c3338;
+	background-color: #ffffff;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.profitly-planner .profitly-field input[type="number"],
+.profitly-planner .profitly-field input:focus,
+.profitly-planner .profitly-field select:focus {
+	border-color: #007cba;
+	box-shadow: 0 0 0 1px #007cba;
+	outline: 2px solid transparent;
+}
+
+.profitly-planner .profitly-field input[type="number"] {
+	min-width: 170px;
+	font-variant-numeric: tabular-nums;
+}
+
 .profitly-planner .profitly-field select {
 	min-width: 170px;
+	padding-right: 28px;
+	cursor: pointer;
 }
 
 .profitly-planner .profitly-field__pair {
 	display: flex;
 	align-items: center;
-	gap: 6px;
+	gap: 8px;
+}
+
+.profitly-planner .profitly-field__separator {
+	color: #8c8f94;
+	font-weight: 500;
+	user-select: none;
 }
 
 .profitly-planner .profitly-field--submit {
-	/* Sits directly after the inputs: the control row reads as one left-to-right
-	   cluster rather than a form with a detached action at the far edge. */
-	padding-left: 4px;
+	margin-left: auto;
 }
 
-/* Section headings: title and its qualifier share one line. */
+.profitly-planner .profitly-field--submit .button-primary {
+	height: 36px;
+	line-height: 34px;
+	padding: 0 20px;
+	font-size: 13px;
+	font-weight: 500;
+	border-radius: 4px;
+	background: #007cba;
+	border-color: #007cba;
+	color: #ffffff;
+	cursor: pointer;
+	box-shadow: none;
+	transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.profitly-planner .profitly-field--submit .button-primary:hover,
+.profitly-planner .profitly-field--submit .button-primary:focus {
+	background: #006ba1;
+	border-color: #006ba1;
+	color: #ffffff;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+@media screen and (max-width: 900px) {
+	.profitly-planner .profitly-field--submit {
+		margin-left: 0;
+		width: 100%;
+	}
+
+	.profitly-planner .profitly-field--submit .button-primary {
+		width: 100%;
+	}
+}
+
+/* Section headings: title with badge pill */
 .profitly-planner__section-title {
 	display: flex;
 	flex-wrap: wrap;
-	align-items: baseline;
-	gap: 8px;
-	font-size: 14px;
-	margin: 20px 0 8px;
+	align-items: center;
+	gap: 10px;
+	font-size: 15px;
+	font-weight: 600;
+	color: #1e1e1e;
+	margin: 28px 0 14px;
 	padding: 0;
 }
 
 .profitly-planner__section-note {
 	font-size: 12px;
-	font-weight: 400;
-	color: #646970;
-}
-
-.profitly-planner__explainer {
-	margin: 8px 0 0;
+	font-weight: 500;
 	color: #50575e;
-	max-width: 80ch;
+	background: #f0f0f1;
+	padding: 3px 10px;
+	border-radius: 12px;
+	letter-spacing: normal;
 }
 
-/* Cards: same components as the Reports page, tightened for a calculator. */
+/* Explainer: WooCommerce Analytics insight banner */
+.profitly-planner__explainer {
+	margin: 16px 0 24px;
+	padding: 14px 18px;
+	background: #f0f6fc;
+	border: 1px solid #cce5ff;
+	border-left: 4px solid #007cba;
+	border-radius: 4px;
+	color: #1d2327;
+	font-size: 13px;
+	line-height: 1.5;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+	max-width: none;
+}
+
+.profitly-planner__explainer strong {
+	color: #007cba;
+	font-weight: 600;
+}
+
+/* KPI Summary Cards */
 .profitly-planner .profitly-cards {
-	gap: 12px;
+	gap: 16px;
 	margin-bottom: 0;
 }
 
@@ -283,8 +384,7 @@
 	grid-template-columns: repeat(5, 1fr);
 }
 
-/* 5 metrics reflow 3+2 rather than 2+2+1, which leaves an orphan card. */
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 1200px) {
 	.profitly-cards--five {
 		grid-template-columns: repeat(3, 1fr);
 	}
@@ -295,91 +395,251 @@
 }
 
 @media screen and (max-width: 782px) {
-	.profitly-cards--five {
+
+	.profitly-cards--five,
+	.profitly-cards--four {
 		grid-template-columns: repeat(2, 1fr);
 	}
 }
 
+@media screen and (max-width: 540px) {
+
+	.profitly-cards--five,
+	.profitly-cards--four {
+		grid-template-columns: 1fr;
+	}
+}
+
 .profitly-planner .profitly-card {
-	padding: 10px 12px;
-	border-color: #dcdcde;
+	padding: 16px 20px;
+	background: #ffffff;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+	position: relative;
+	transition: box-shadow 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.profitly-planner .profitly-card:hover {
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 .profitly-planner .profitly-card__label {
-	margin-bottom: 2px;
 	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	color: #646970;
+	margin-bottom: 8px;
 }
 
 .profitly-planner .profitly-card__value {
-	font-size: 20px;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.2;
+	color: #1e1e1e;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: -0.01em;
 }
 
 .profitly-planner .profitly-card__period {
-	margin: 2px 0 0;
+	font-size: 12px;
+	color: #757575;
+	margin: 6px 0 0;
+	line-height: 1.4;
 }
 
-/* The answer card. Marked by an accent rule and a larger number, not colour alone. */
+/* The answer hero card: distinctive WooCommerce highlight */
 .profitly-planner .profitly-card--hero {
-	border-color: #2271b1;
-	box-shadow: inset 3px 0 0 #2271b1;
+	border-color: #007cba;
+	border-top: 3px solid #007cba;
+	box-shadow: 0 2px 6px rgba(0, 124, 186, 0.08);
+	background: linear-gradient(180deg, rgba(0, 124, 186, 0.03) 0%, rgba(255, 255, 255, 1) 100%);
 }
 
 .profitly-planner .profitly-card--hero .profitly-card__value {
-	font-size: 26px;
-	line-height: 1.15;
+	font-size: 28px;
+	font-weight: 700;
+	color: #007cba;
 }
 
-/* Tables sit in the same two-column grid the Reports page uses. */
+/* Tables: WooCommerce Analytics leaderboard & comparison cards */
 .profitly-planner .profitly-tables {
-	margin: 16px 0 0;
+	margin: 20px 0 0;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
 	align-items: start;
 }
 
+@media screen and (max-width: 960px) {
+	.profitly-planner .profitly-tables {
+		grid-template-columns: 1fr;
+	}
+}
+
 .profitly-planner .profitly-table-wrap {
-	padding: 12px 14px;
-	border-color: #dcdcde;
+	padding: 0;
+	background: #ffffff;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+	overflow: hidden;
 }
 
-.profitly-planner .profitly-table-wrap .description {
-	margin: 8px 0 0;
+.profitly-planner .profitly-table-title {
+	padding: 16px 20px;
+	margin: 0;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1e1e1e;
+	background: #ffffff;
+	border-bottom: 1px solid #f0f0f1;
 }
 
-.profitly-planner-table td,
-.profitly-planner-table th {
-	padding: 6px 10px;
+.profitly-planner-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0;
+	border: 0;
+}
+
+.profitly-planner-table thead th {
+	background: #f8f9fa;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	color: #646970;
+	padding: 11px 20px;
+	border-bottom: 1px solid #e0e0e0;
+	border-top: 0;
+}
+
+.profitly-planner-table tbody th,
+.profitly-planner-table tbody td {
+	padding: 12px 20px;
+	font-size: 13px;
+	line-height: 1.4;
+	color: #2c3338;
+	border-bottom: 1px solid #f0f0f1;
+	border-top: 0;
+}
+
+.profitly-planner-table tbody tr:last-child th,
+.profitly-planner-table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.profitly-planner-table tbody tr:nth-child(even) {
+	background-color: #fafbfc;
+}
+
+.profitly-planner-table tbody tr:hover {
+	background-color: #f0f6fc;
 }
 
 .profitly-planner-table .profitly-num {
 	text-align: right;
 	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+	font-weight: 500;
 }
 
-/* Current-margin row: the text badge carries the meaning, the tint only supports it. */
-.profitly-row-current > * {
-	background: #f0f6fc;
+/* Current-margin row styling */
+.profitly-row-current,
+.profitly-row-current>* {
+	background: #f0f7fd !important;
+	font-weight: 600;
 }
 
-.profitly-row-current > :first-child {
-	box-shadow: inset 3px 0 0 #2271b1;
+.profitly-row-current> :first-child {
+	box-shadow: inset 3px 0 0 #007cba;
 }
 
 .profitly-row-badge {
-	margin-left: 4px;
-	padding: 1px 5px;
-	border-radius: 9px;
-	background: #2271b1;
-	color: #fff;
+	margin-left: 8px;
+	padding: 2px 8px;
+	border-radius: 10px;
+	background: #007cba;
+	color: #ffffff;
 	font-size: 10px;
 	font-weight: 600;
 	text-transform: uppercase;
-	letter-spacing: 0.03em;
+	letter-spacing: 0.5px;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.profitly-planner .profitly-table-wrap .description {
+	padding: 12px 20px;
+	margin: 0;
+	background: #fafbfc;
+	border-top: 1px solid #f0f0f1;
+	font-size: 12px;
+	color: #646970;
+	line-height: 1.5;
+}
+
+/* Notices & Empty State */
+.profitly-planner .notice.inline {
+	margin: 16px 0;
+	padding: 14px 18px;
+	border-radius: 4px;
+	border: 1px solid #dcdcde;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+	background: #ffffff;
+}
+
+.profitly-planner .notice-error.inline {
+	border-left: 4px solid #d63638;
+}
+
+.profitly-planner .notice-warning.inline {
+	border-left: 4px solid #dba617;
+}
+
+.profitly-planner .notice-info.inline {
+	border-left: 4px solid #007cba;
+}
+
+.profitly-planner .profitly-empty-state {
+	background: #ffffff;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	padding: 48px 24px;
+	text-align: center;
+	color: #50575e;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+	margin: 20px 0;
 }
 
 .profitly-planner__disclaimer {
-	margin-top: 14px;
-	max-width: 80ch;
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+	margin-top: 28px;
+	padding: 14px 18px;
+	background: #ffffff;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+	color: #646970;
 }
 
-.profitly-planner .notice.inline {
-	margin: 12px 0 0;
+.profitly-planner__disclaimer .dashicons {
+	color: #8c8f94;
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+	line-height: 18px;
+	margin-top: 1px;
+	flex-shrink: 0;
+}
+
+.profitly-planner__disclaimer p {
+	margin: 0;
+	font-size: 12px;
+	line-height: 1.6;
+	color: #646970;
 }

@@ -39,10 +39,12 @@ $profitly_dates   = sprintf(
 );
 ?>
 <div class="wrap woocommerce profitly-planner wc-admin-page">
-	<h1 class="wp-heading-inline"><?php esc_html_e( 'Profit Target Planner', 'profitly' ); ?></h1>
-	<p class="profitly-planner__intro"><?php esc_html_e( 'Plan your sales around the profit you want to achieve.', 'profitly' ); ?></p>
+	<div class="profitly-planner__header">
+		<h1 class="wp-heading-inline profitly-planner__title"><?php esc_html_e( 'Profit Target Planner', 'profitly' ); ?></h1>
+		<p class="profitly-planner__intro"><?php esc_html_e( 'Plan your sales around the profit you want to achieve.', 'profitly' ); ?></p>
+	</div>
 
-	<form method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>" class="profitly-planner__controls">
+	<form method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>" class="profitly-planner__controls woocommerce-card">
 		<input type="hidden" name="page" value="<?php echo esc_attr( Menu::TARGET_SLUG ); ?>" />
 
 		<div class="profitly-field">
@@ -64,6 +66,7 @@ $profitly_dates   = sprintf(
 				id="profitly-target"
 				name="target"
 				value="<?php echo esc_attr( $raw_target ); ?>"
+				placeholder="0.00"
 				<?php echo $target_invalid ? 'aria-invalid="true"' : ''; ?>
 			/>
 		</div>
@@ -95,7 +98,7 @@ $profitly_dates   = sprintf(
 			<div class="profitly-field__pair">
 				<label for="profitly-start" class="screen-reader-text"><?php esc_html_e( 'Custom range start date', 'profitly' ); ?></label>
 				<input type="date" id="profitly-start" name="start" value="<?php echo esc_attr( $period['start']->format( 'Y-m-d' ) ); ?>" />
-				<span aria-hidden="true">&ndash;</span>
+				<span aria-hidden="true" class="profitly-field__separator">&ndash;</span>
 				<label for="profitly-end" class="screen-reader-text"><?php esc_html_e( 'Custom range end date', 'profitly' ); ?></label>
 				<input type="date" id="profitly-end" name="end" value="<?php echo esc_attr( $period['end']->format( 'Y-m-d' ) ); ?>" />
 			</div>
@@ -252,7 +255,7 @@ $profitly_dates   = sprintf(
 		<div class="profitly-tables">
 
 			<?php if ( ProfitTargetCalculator::STATUS_OK === $result['status'] ) : ?>
-				<div class="profitly-table-wrap">
+				<div class="profitly-table-wrap woocommerce-card">
 					<h2 class="profitly-table-title"><?php esc_html_e( 'How you compare', 'profitly' ); ?></h2>
 					<table class="widefat striped profitly-planner-table">
 						<caption class="screen-reader-text"><?php esc_html_e( 'Projected profit at your current pace compared with your target', 'profitly' ); ?></caption>
@@ -291,7 +294,7 @@ $profitly_dates   = sprintf(
 			<?php endif; ?>
 
 			<?php if ( ! empty( $result['sensitivity'] ) ) : ?>
-				<div class="profitly-table-wrap">
+				<div class="profitly-table-wrap woocommerce-card">
 					<h2 class="profitly-table-title"><?php esc_html_e( 'Margin sensitivity', 'profitly' ); ?></h2>
 					<table class="widefat striped profitly-planner-table">
 						<caption class="screen-reader-text"><?php esc_html_e( 'Revenue required at different net margins', 'profitly' ); ?></caption>
@@ -321,9 +324,12 @@ $profitly_dates   = sprintf(
 
 		</div>
 
-		<p class="description profitly-planner__disclaimer">
-			<?php esc_html_e( 'This estimate is based on your historical Profitly profit margin and does not account for expenses outside Profitly’s current data, such as salaries, rent, software, taxes or financing costs.', 'profitly' ); ?>
-		</p>
+		<div class="profitly-planner__disclaimer woocommerce-card">
+			<span class="dashicons dashicons-info-outline" aria-hidden="true"></span>
+			<p>
+				<?php esc_html_e( 'This estimate is based on your historical Profitly profit margin and does not account for expenses outside Profitly’s current data, such as salaries, rent, software, taxes or financing costs.', 'profitly' ); ?>
+			</p>
+		</div>
 
 	<?php endif; ?>
 </div>

@@ -3,7 +3,7 @@
  * Plugin Name:       Profitly — Profit Analytics for WooCommerce
  * Plugin URI:        https://standalonetech.com/
  * Description:       Track the real profit of your WooCommerce store by capturing cost of goods (COGS) and snapshotting it onto historical orders.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires Plugins:  woocommerce
  * Author:            StandaloneTech
  * Author URI:        https://github.com/standalonetech/
@@ -13,13 +13,15 @@
  * Domain Path:       /languages
  * Requires PHP:      7.4
  * Requires at least: 6.4
+ * WC requires at least: 8.2
+ * WC tested up to:    11.0
  *
  * @package Profitly
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'PROFITLY_VERSION', '1.0.1' );
+define( 'PROFITLY_VERSION', '1.0.2' );
 define( 'PROFITLY_FILE', __FILE__ );
 define( 'PROFITLY_PATH', plugin_dir_path( __FILE__ ) );
 define( 'PROFITLY_URL', plugin_dir_url( __FILE__ ) );
