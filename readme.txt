@@ -2,7 +2,7 @@
 Contributors: standalonetech
 Tags: profit, cost of goods, cogs, analytics, woocommerce
 Requires at least: 6.4
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 Stable tag: 1.0.2
 License: GPLv2 or later
@@ -149,8 +149,12 @@ No. Profit calculations for reports run in the admin area, not on your storefron
 
 == Changelog ==
 
-= 1.0.2 (Unreleased) =
-* Development in progress.
+= 1.0.2 =
+* New: Profit Target Planner - enter a profit goal and see the revenue, orders, and daily pace required to hit it, based on your own historical margin.
+* New: margin sensitivity table showing the revenue needed at different net margins.
+* Declared WooCommerce compatibility in the plugin header (requires 8.2, tested up to 11.0).
+* Tested up to WordPress 7.1.
+* Refined the planner screen layout to match WooCommerce admin styling.
 
 = 1.0.1 =
 * Renamed the plugin to Profitly.
@@ -173,6 +177,9 @@ No. Profit calculations for reports run in the admin area, not on your storefron
 * HPOS and block checkout compatibility.
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+Adds the Profit Target Planner. Update recommended.
 
 = 1.0.1 =
 Improvements and fixes following the initial release. Update recommended.

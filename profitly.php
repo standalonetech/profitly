@@ -13,6 +13,8 @@
  * Domain Path:       /languages
  * Requires PHP:      7.4
  * Requires at least: 6.4
+ * WC requires at least: 8.2
+ * WC tested up to:    11.0
  *
  * @package Profitly
  */
