@@ -149,7 +149,7 @@ No. Profit calculations for reports run in the admin area, not on your storefron
 
 == Changelog ==
 
-= 1.0.2 =
+= 1.0.2 (August 28, 2026) =
 * New: Profit Target Planner - enter a profit goal and see the revenue, orders, and daily pace required to hit it, based on your own historical margin.
 * New: margin sensitivity table showing the revenue needed at different net margins.
 * Declared WooCommerce compatibility in the plugin header (requires 8.2, tested up to 11.0).

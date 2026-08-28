@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Profitly — Profit Analytics for WooCommerce 1.0.1\n"
+"Project-Id-Version: Profitly — Profit Analytics for WooCommerce 1.0.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/profitly\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-08T03:10:46+00:00\n"
+"POT-Creation-Date: 2026-08-28T07:02:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: profitly\n"
@@ -39,22 +39,27 @@ msgstr ""
 msgid "https://github.com/standalonetech/"
 msgstr ""
 
-#: profitly.php:41
+#: profitly.php:43
 msgid "Profitly requires WooCommerce to be installed and active."
 msgstr ""
 
-#: src/Admin/Menu.php:53
-#: src/Admin/Menu.php:54
+#: src/Admin/Menu.php:59
+#: src/Admin/Menu.php:60
 msgid "Profitly"
 msgstr ""
 
-#: src/Admin/Menu.php:72
-#: src/Admin/Menu.php:73
+#: src/Admin/Menu.php:78
+#: src/Admin/Menu.php:79
 msgid "Reports"
 msgstr ""
 
-#: src/Admin/Menu.php:81
-#: src/Admin/Menu.php:82
+#: src/Admin/Menu.php:87
+#: src/Admin/Menu.php:88
+msgid "Profit Target"
+msgstr ""
+
+#: src/Admin/Menu.php:98
+#: src/Admin/Menu.php:99
 msgid "Settings"
 msgstr ""
 
@@ -73,6 +78,7 @@ msgstr ""
 #: src/Admin/OrderProfitMetaBox.php:97
 #: src/Dashboard/Views/widget.php:38
 #: src/Export/CsvExporter.php:147
+#: src/Planner/Views/profit-target-page.php:220
 #: src/Reports/Views/bottom-products-table.php:28
 #: src/Reports/Views/top-products-table.php:28
 msgid "Revenue"
@@ -99,10 +105,13 @@ msgid "Gross profit"
 msgstr ""
 
 #: src/Admin/OrderProfitMetaBox.php:126
+#: src/Planner/Views/profit-target-page.php:232
 msgid "Net profit"
 msgstr ""
 
 #: src/Admin/OrderProfitMetaBox.php:133
+#: src/Planner/Views/profit-target-page.php:236
+#: src/Planner/Views/profit-target-page.php:303
 msgid "Net margin"
 msgstr ""
 
@@ -147,7 +156,7 @@ msgid "Profitly: Last 7 Days"
 msgstr ""
 
 #: src/Dashboard/Views/widget.php:22
-#: src/Reports/DateRangeFilter.php:164
+#: src/Reports/DateRangeFilter.php:178
 msgid "vs previous 7 days"
 msgstr ""
 
@@ -225,28 +234,236 @@ msgstr ""
 msgid "Profitly: gateway fee could not be calculated because no fee snapshot was recorded for this order (it predates the plugin or its settings)."
 msgstr ""
 
-#: src/Reports/DateRangeFilter.php:141
+#: src/Planner/PlanningPeriod.php:124
+msgid "Next month"
+msgstr ""
+
+#: src/Planner/PlanningPeriod.php:127
+msgid "This quarter"
+msgstr ""
+
+#: src/Planner/PlanningPeriod.php:130
+msgid "Custom range"
+msgstr ""
+
+#: src/Planner/PlanningPeriod.php:134
+msgid "This month"
+msgstr ""
+
+#: src/Planner/ProfitTargetPage.php:48
+#: src/Reports/ReportsPage.php:36
+msgid "You do not have permission to view Profitly reports."
+msgstr ""
+
+#. translators: 1: period label, 2: start date, 3: end date, 4: number of days.
+#: src/Planner/Views/profit-target-page.php:34
+#, php-format
+msgid "%1$s — %2$s to %3$s (%4$s days)"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:43
+msgid "Profit Target Planner"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:44
+msgid "Plan your sales around the profit you want to achieve."
+msgstr ""
+
+#. translators: %s: store currency code, e.g. USD.
+#: src/Planner/Views/profit-target-page.php:55
+#, php-format
+msgid "Target profit (%s)"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:75
+msgid "Planning period"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:86
+msgid "Historical baseline"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:97
+msgid "Custom range dates"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:99
+msgid "Custom range start date"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:102
+msgid "Custom range end date"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:108
+msgid "Calculate"
+msgstr ""
+
+#. translators: %s: the largest accepted target profit.
+#: src/Planner/Views/profit-target-page.php:118
+#, php-format
+msgid "Enter a target profit greater than zero and no larger than %s."
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:129
+msgid "Profitly needs historical order data to calculate your target."
+msgstr ""
+
+#. translators: %s: the selected baseline window label, e.g. "Last 30 days".
+#: src/Planner/Views/profit-target-page.php:134
+#, php-format
+msgid "There are no orders in the selected baseline (%s). Try a longer baseline once you have made some sales."
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:146
+msgid "Your profit target"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:152
+#: src/Planner/Views/profit-target-page.php:304
+msgid "Revenue required"
+msgstr ""
+
+#. translators: %s: the target profit.
+#: src/Planner/Views/profit-target-page.php:158
+#, php-format
+msgid "to earn %s in profit"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:165
+msgid "Orders required"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:169
+msgid "Revenue per day"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:173
+msgid "Orders per day"
+msgstr ""
+
+#. translators: 1: required revenue, 2: net margin, 3: target profit.
+#: src/Planner/Views/profit-target-page.php:182
+#, php-format
+msgid "Based on your historical Profitly margin of %2$s, you would need approximately <strong>%1$s</strong> in revenue to generate %3$s in profit."
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:193
+msgid "Your historical margin is not currently sufficient to calculate a revenue target."
+msgstr ""
+
+#. translators: %s: the merchant's net margin, e.g. "-4.20%".
+#: src/Planner/Views/profit-target-page.php:198
+#, php-format
+msgid "Your net margin over this baseline is %s, so selling more at the same margin would not produce the profit you want. Improve profitability first — the table below shows what different margins would require."
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:208
+msgid "Enter a target profit above to see the revenue and orders you would need."
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:214
+msgid "Current performance"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:224
+msgid "Orders"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:228
+msgid "Average order value"
+msgstr ""
+
+#. translators: %s: number of orders in the baseline.
+#: src/Planner/Views/profit-target-page.php:247
+#, php-format
+msgid "This calculation is based on a limited number of orders (%s) and may not be representative. A longer baseline gives a steadier average."
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:259
+msgid "How you compare"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:261
+msgid "Projected profit at your current pace compared with your target"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:264
+msgid "Profit at your current pace"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:268
+msgid "Target profit"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:272
+msgid "Profit gap"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:277
+msgid "None — already on pace"
+msgstr ""
+
+#. translators: 1: baseline label, e.g. "Last 90 days", 2: number of days in the planning period.
+#: src/Planner/Views/profit-target-page.php:287
+#, php-format
+msgid "Your current pace projects your baseline profit (%1$s) across the %2$s days of the planning period."
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:298
+msgid "Margin sensitivity"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:300
+msgid "Revenue required at different net margins"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:313
+msgid "your margin"
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:321
+msgid "A better margin needs less revenue to reach the same profit."
+msgstr ""
+
+#: src/Planner/Views/profit-target-page.php:330
+msgid "This estimate is based on your historical Profitly profit margin and does not account for expenses outside Profitly’s current data, such as salaries, rent, software, taxes or financing costs."
+msgstr ""
+
+#: src/Reports/DateRangeFilter.php:149
 msgid "Today"
 msgstr ""
 
-#: src/Reports/DateRangeFilter.php:144
+#: src/Reports/DateRangeFilter.php:152
 msgid "Last 7 days"
 msgstr ""
 
-#: src/Reports/DateRangeFilter.php:148
+#: src/Reports/DateRangeFilter.php:155
+msgid "Last 90 days"
+msgstr ""
+
+#: src/Reports/DateRangeFilter.php:158
+msgid "Last 12 months"
+msgstr ""
+
+#: src/Reports/DateRangeFilter.php:162
 msgid "Last 30 days"
 msgstr ""
 
-#: src/Reports/DateRangeFilter.php:161
+#: src/Reports/DateRangeFilter.php:175
 msgid "vs previous day"
 msgstr ""
 
-#: src/Reports/DateRangeFilter.php:168
-msgid "vs previous 30 days"
+#: src/Reports/DateRangeFilter.php:181
+msgid "vs previous 90 days"
 msgstr ""
 
-#: src/Reports/ReportsPage.php:36
-msgid "You do not have permission to view Profitly reports."
+#: src/Reports/DateRangeFilter.php:184
+msgid "vs previous 12 months"
+msgstr ""
+
+#: src/Reports/DateRangeFilter.php:188
+msgid "vs previous 30 days"
 msgstr ""
 
 #: src/Reports/ReportsPage.php:126
