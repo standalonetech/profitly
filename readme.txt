@@ -4,7 +4,7 @@ Tags: profit, cost of goods, cogs, analytics, woocommerce
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -148,6 +148,9 @@ No. Profit calculations for reports run in the admin area, not on your storefron
 6. Settings — gateway fees, shipping cost model, and general options.
 
 == Changelog ==
+
+= 1.0.3 (Unreleased) =
+* Development in progress.
 
 = 1.0.2 (August 28, 2026) =
 * New: Profit Target Planner - enter a profit goal and see the revenue, orders, and daily pace required to hit it, based on your own historical margin.
