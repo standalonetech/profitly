@@ -39,6 +39,7 @@ Thumbs.db
 
 # Tests and build artifacts
 /tests
+/bin
 /build
 /dist
 /.phpunit.result.cache

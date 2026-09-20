@@ -18,6 +18,7 @@ composer lint         # phpcs — WordPress-Extra + WordPress-Docs (config: phpc
 composer lint:fix     # phpcbf — auto-fix lint violations
 composer analyze      # phpstan analyse — level 6, src/ only (config: phpstan.neon.dist)
 composer test         # phpunit
+composer prefix       # re-generate vendor-prefixed/ (Strauss) after updating the telemetry library
 ```
 
 Tests live in `tests/` (PSR-4 maps `Profitly\Tests\` → `tests/`), configured by
@@ -116,6 +117,18 @@ baseline aggregation (same `ReportCache`, same key shape as `ReportsPage`), and 
 result to `Planner/Views/profit-target-page.php`. All input arrives via GET on a read-only
 screen, so there is no nonce — the same rationale as the report range selector.
 
+### Telemetry (opt-in usage data)
+`Telemetry/Telemetry` configures the StandaloneTech Telemetry client (private repo
+`standalonetech/wp-telemetry`) from `Plugin::boot()` and exposes `Telemetry::client()` to the
+Settings > General checkbox and "Delete my data" button. **Nothing is ever sent without consent**
+(unset = no); the library enforces this in its single `Sender`, never add a request elsewhere.
+The library is consumed through **Strauss**: it and Strauss are `require-dev`, and the generated
+`vendor-prefixed/` (namespace `Profitly\Vendor\StandaloneTech\Telemetry`) is **committed** and is
+what ships. Never edit it by hand; bump the library and run `composer prefix`, which also copies
+`assets/`, normalises permissions and pins the text domain to `'profitly'` so `wp i18n make-pot`
+picks up its strings. `uninstall.php` always calls `Client::cleanup( 'profitly' )`. The `readme.txt`
+"External services" section must stay accurate with what the library sends.
+
 ### Capabilities
 Two caps gate everything (`Constants`): `view_woocommerce_reports` for read-only screens
 (`CAP_VIEW_REPORTS`), `manage_woocommerce` for write/settings screens (`CAP_MANAGE`).
@@ -132,6 +145,7 @@ Two caps gate everything (`Constants`): `view_woocommerce_reports` for read-only
 | Reporting & aggregation | `src/Reports/` (+ `Views/`) |
 | Profit Target Planner | `src/Planner/` (+ `Views/`) |
 | Dashboard widget | `src/Dashboard/` |
+| Telemetry wiring + prefixed library | `src/Telemetry/`, `vendor-prefixed/` (generated, committed), `bin/post-prefix.php` |
 | CSV export | `src/Export/` |
 | Settings | `src/Settings/`, `src/Settings/Tabs/` |
 | Admin menu, product fields, meta boxes | `src/Admin/` |
@@ -140,7 +154,7 @@ Two caps gate everything (`Constants`): `view_woocommerce_reports` for read-only
 ## Releasing
 
 WordPress.org ships via SVN and installs the plugin **without** running Composer, so the
-shipped package **must include `vendor/`** (the autoloader) but exclude dev tooling. `vendor/`
+shipped package **must include `vendor/`** (the autoloader) and `vendor-prefixed/` but exclude dev tooling. `vendor/`
 is git-ignored but intentionally NOT in `.distignore`. Build with
 `composer install --no-dev --optimize-autoloader` then `wp dist-archive`. The version must be
 bumped identically in **three** places: `profitly.php` (`Version:` header and

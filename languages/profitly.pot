@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Profitly — Profit Analytics for WooCommerce 1.0.2\n"
+"Project-Id-Version: Profitly — Profit Analytics for WooCommerce 1.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/profitly\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-28T07:03:49+00:00\n"
+"POT-Creation-Date: 2026-09-20T06:10:34+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: profitly\n"
@@ -537,7 +537,7 @@ msgid "No product sales in this period."
 msgstr ""
 
 #: src/Settings/SettingsHandler.php:54
-#: src/Settings/SettingsPage.php:35
+#: src/Settings/SettingsPage.php:36
 msgid "You do not have permission to change Profitly settings."
 msgstr ""
 
@@ -545,7 +545,7 @@ msgstr ""
 msgid "Settings saved."
 msgstr ""
 
-#: src/Settings/SettingsPage.php:56
+#: src/Settings/SettingsPage.php:57
 msgid "Profitly Settings"
 msgstr ""
 
@@ -585,20 +585,24 @@ msgstr ""
 msgid "Product subtotal only"
 msgstr ""
 
-#: src/Settings/Tabs/GeneralTab.php:32
+#: src/Settings/Tabs/GeneralTab.php:34
 msgid "General"
 msgstr ""
 
-#: src/Settings/Tabs/GeneralTab.php:46
+#: src/Settings/Tabs/GeneralTab.php:48
 msgid "Data retention"
 msgstr ""
 
-#: src/Settings/Tabs/GeneralTab.php:51
+#: src/Settings/Tabs/GeneralTab.php:53
 msgid "Delete all Profitly data when this plugin is uninstalled"
 msgstr ""
 
-#: src/Settings/Tabs/GeneralTab.php:53
+#: src/Settings/Tabs/GeneralTab.php:55
 msgid "When enabled, uninstalling Profitly will permanently remove all COGS data, settings, and order profit snapshots. This cannot be undone."
+msgstr ""
+
+#: src/Settings/Tabs/GeneralTab.php:62
+msgid "Usage data"
 msgstr ""
 
 #: src/Settings/Tabs/ShippingCostsTab.php:40
@@ -635,4 +639,131 @@ msgstr ""
 
 #: src/Settings/Tabs/ShippingCostsTab.php:171
 msgid "Rest of the World"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:128
+#, php-format
+msgid "Share anonymous usage data to help improve %s."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:132
+msgid "Plugin, WordPress and PHP versions and your locale. Never your site address, email or store data."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:133
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:190
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:165
+msgid "Privacy policy"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:188
+#, php-format
+msgid "Help improve %s? Allow it to send anonymous usage data: plugin, WordPress and PHP versions and your locale. It never sends your site address, email or store data, and nothing is sent unless you allow it."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:196
+msgid "Allow"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:197
+msgid "No thanks"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:211
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:107
+msgid "You do not have permission to do this."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:56
+msgid "I found a better plugin"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:57
+msgid "It is missing a feature I need"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:58
+msgid "It is not working as expected"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:59
+msgid "It is too complex to use"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:60
+msgid "It is a temporary deactivation"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:61
+msgid "I no longer need it"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:62
+msgid "Other"
+msgstr ""
+
+#. translators: %s: plugin name.
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:138
+#, php-format
+msgid "Quick feedback about %s"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:141
+msgid "Why are you deactivating? Your answer is optional."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:143
+msgid "Reason for deactivating"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:153
+msgid "Need a hand? Contact support."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:156
+msgid "Anything else? (optional)"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:159
+msgid "Submit & Deactivate"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:160
+msgid "Skip & Deactivate"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:161
+msgid "Cancel"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:164
+msgid "Submitting sends your reason and comment, days active, an anonymous site ID, plugin, WordPress and PHP versions and your locale. Never your site address, email or store data. Skip and Cancel send nothing."
+msgstr ""
+
+#. translators: 1: plugin name, 2: server host name.
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:60
+#, php-format
+msgid "Only if you allow it, %1$s sends anonymous usage data to %2$s: a random site ID, the plugin and its version, the WordPress, PHP and WooCommerce versions, your locale and whether the site is a multisite. This is sent when you allow it and then once a week."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:61
+msgid "If you deactivate the plugin and choose \"Submit & Deactivate\", your reason, optional comment and the number of days the plugin was active are sent as well. Choosing \"Skip & Deactivate\" sends nothing."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:62
+msgid "It never sends your site address, admin email, user names, customer data or orders. Nothing is sent unless you allow it. You can withdraw at any time in the plugin settings, which also asks the server to delete the data already sent."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:79
+msgid "Delete my data"
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:129
+msgid "Your usage data was deleted and sharing is now off."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:129
+msgid "The server could not be reached, so nothing was deleted. Please try again later."
 msgstr ""

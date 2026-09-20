@@ -4,7 +4,7 @@ Tags: profit, cost of goods, cogs, analytics, woocommerce
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -108,7 +108,9 @@ No. Profitly snapshots each product's cost onto the order at the moment it is pl
 
 = Does my data get sent anywhere? =
 
-No. All calculations happen on your own server, and all data is stored in your own WordPress database. Profitly does not send your financial data to any external service.
+No. All calculations happen on your own server, and all data is stored in your own WordPress database. Profitly never sends your financial, order or customer data anywhere.
+
+The only exception is optional anonymous usage data, which is off until you turn it on in Profitly > Settings > General. See "External services" below for exactly what it sends.
 
 = Is Profitly compatible with High-Performance Order Storage (HPOS)? =
 
@@ -138,6 +140,22 @@ Profitly reports each order in the currency it was placed in and does not conver
 
 No. Profit calculations for reports run in the admin area, not on your storefront, and reporting queries are optimized to handle large numbers of orders.
 
+== External services ==
+
+Profitly can send anonymous usage data to a server run by StandaloneTech (`https://telemetry.standalonetech.com`). **This is opt-in: nothing is sent, and no request is made, unless you tick "Usage data" in Profitly > Settings > General (or press "Allow" on the one-time notice).** You can turn it off at any time, and turning it off also asks the server to delete the data already sent. The "Delete my data" button on the same screen does the same and tells you whether it worked. If you plan to uninstall Profitly, turn it off first.
+
+If you allow it, this is sent when you allow it, then once a week:
+
+* a random anonymous site ID (not derived from your site address)
+* Profitly's version, and your WordPress, PHP and WooCommerce versions
+* your site language (locale) and whether the site is a multisite
+
+If you allow it and then deactivate Profitly, choosing "Submit & Deactivate" in the deactivation window also sends the reason you picked, the optional comment you typed and the number of days Profitly was active. "Skip & Deactivate" and "Cancel" send nothing.
+
+As with any web request, the server can see your site's IP address. It is used only to rate-limit requests and is not stored; only a salted hash is kept, for up to an hour.
+
+Profitly never sends your site address, admin email, user names, customers, orders, products, costs or profit figures. See the [StandaloneTech privacy policy](https://standalonetech.com/privacy-policy/).
+
 == Screenshots ==
 
 1. Profit reports dashboard — revenue, net profit, order count, and average margin, with period-over-period comparison.
@@ -148,6 +166,9 @@ No. Profit calculations for reports run in the admin area, not on your storefron
 6. Settings — gateway fees, shipping cost model, and general options.
 
 == Changelog ==
+
+= 1.0.3 (September 20, 2026) =
+* New: optional, opt-in anonymous usage data and deactivation feedback. Off by default, and turning it off deletes what was already sent; see "External services".
 
 = 1.0.2 (August 28, 2026) =
 * New: Profit Target Planner - enter a profit goal and see the revenue, orders, and daily pace required to hit it, based on your own historical margin.
@@ -177,6 +198,9 @@ No. Profit calculations for reports run in the admin area, not on your storefron
 * HPOS and block checkout compatibility.
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Adds optional, opt-in anonymous usage data (off by default). Nothing is sent unless you allow it.
 
 = 1.0.2 =
 Adds the Profit Target Planner. Update recommended.

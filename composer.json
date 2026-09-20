@@ -1,6 +1,6 @@
 {
 	"name": "profitly/profitly",
-	"description": "Profitly — Profit Analytics for WooCommerce.",
+	"description": "Profitly \u2014 Profit Analytics for WooCommerce.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",
 	"require": {
@@ -11,12 +11,17 @@
 		"wp-coding-standards/wpcs": "^3.0",
 		"szepeviktor/phpstan-wordpress": "^2.0",
 		"php-stubs/woocommerce-stubs": "^9.0",
-		"dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"standalonetech/wp-telemetry": "^1.0",
+		"brianhenryie/strauss": "^0.19"
 	},
 	"autoload": {
 		"psr-4": {
 			"Profitly\\": "src/"
-		}
+		},
+		"classmap": [
+			"vendor-prefixed/"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {
@@ -32,6 +37,30 @@
 		"lint": "phpcs",
 		"lint:fix": "phpcbf",
 		"analyze": "phpstan analyse",
-		"test": "phpunit"
+		"test": "phpunit",
+		"prefix": [
+			"strauss",
+			"@php bin/post-prefix.php",
+			"@composer dump-autoload"
+		]
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/standalonetech/wp-telemetry.git"
+		}
+	],
+	"extra": {
+		"strauss": {
+			"target_directory": "vendor-prefixed",
+			"namespace_prefix": "Profitly\\Vendor\\",
+			"classmap_prefix": "Profitly_Vendor_",
+			"constant_prefix": "PROFITLY_VENDOR_",
+			"packages": [
+				"standalonetech/wp-telemetry"
+			],
+			"update_call_sites": false,
+			"delete_vendor_packages": false
+		}
 	}
 }

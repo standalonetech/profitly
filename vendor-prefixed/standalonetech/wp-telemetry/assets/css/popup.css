@@ -1,0 +1,79 @@
+/* Logical properties throughout, so this works in LTR and RTL without a second file. */
+body.sts-telemetry-open {
+	overflow: hidden;
+}
+
+.sts-telemetry-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 16px;
+	background: rgba(0, 0, 0, 0.6);
+}
+
+.sts-telemetry-overlay[hidden] {
+	display: none;
+}
+
+.sts-telemetry-dialog {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 480px;
+	max-height: 100%;
+	overflow-y: auto;
+	padding: 24px;
+	border-radius: 4px;
+	background: #fff;
+	color: #1d2327;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.sts-telemetry-title {
+	margin: 0 0 8px;
+	padding: 0;
+	font-size: 18px;
+}
+
+.sts-telemetry-reasons {
+	margin: 12px 0;
+	padding: 0;
+	border: 0;
+}
+
+.sts-telemetry-reason {
+	display: block;
+	margin: 0 0 8px;
+}
+
+.sts-telemetry-support {
+	margin: 0 0 12px;
+	padding: 8px 12px;
+	border-inline-start: 4px solid #2271b1;
+	background: #f0f6fc;
+}
+
+.sts-telemetry-text-label {
+	display: block;
+	margin: 0 0 4px;
+}
+
+.sts-telemetry-text {
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.sts-telemetry-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-block: 16px 12px;
+}
+
+.sts-telemetry-note {
+	margin: 0;
+	color: #50575e;
+	font-size: 12px;
+}
