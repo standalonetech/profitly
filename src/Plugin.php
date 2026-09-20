@@ -23,6 +23,7 @@ use Profitly\Profit\OrderSnapshot;
 use Profitly\Reports\ReportCache;
 use Profitly\Settings\SettingsHandler;
 use Profitly\Settings\SettingsRegistry;
+use Profitly\Telemetry\Telemetry;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -82,6 +83,9 @@ final class Plugin {
 		( new Assets() )->register_hooks();
 		( new SettingsRegistry() )->register_hooks();
 		( new SettingsHandler() )->register_hooks();
+
+		// Opt-in anonymous usage data.
+		( new Telemetry() )->register_hooks();
 
 		// Reporting layer.
 		( new ReportCache() )->register_hooks();

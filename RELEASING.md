@@ -15,9 +15,12 @@ dependencies), but **must exclude all dev tooling** (PHPUnit, PHPStan, PHPCS).
 The `.distignore` file declares what to leave out. `vendor/` is deliberately not
 listed there — it is meant to ship.
 
-> As of this scaffold there are **no runtime Composer dependencies** (only
-> `php >=7.4`), so a production `vendor/` contains just the autoloader. That is
-> expected and sufficient to load the `Profitly\` classes via PSR-4.
+> The only runtime dependency is the StandaloneTech Telemetry client, which is
+> **prefixed and committed** in `vendor-prefixed/` (namespace
+> `Profitly\Vendor\StandaloneTech\Telemetry`, so it can never collide with another
+> plugin shipping the same library). The original package and Strauss are `require-dev`
+> only, so `composer install --no-dev` at release time needs no GitHub access.
+> A production `vendor/` therefore contains just the autoloader.
 
 ## Prerequisites
 
@@ -35,6 +38,16 @@ composer install
 composer lint      # phpcs (WordPress-Extra + WordPress-Docs)
 composer analyze   # phpstan level 6
 composer test      # phpunit
+```
+
+If the telemetry library changed, update the prefixed copy first and commit it
+(needs read access to the private `standalonetech/wp-telemetry` repo, e.g. a
+`COMPOSER_AUTH` GitHub token):
+
+```bash
+composer update standalonetech/wp-telemetry
+composer prefix        # Strauss + assets + text-domain pin + dump-autoload
+git add vendor-prefixed && git commit
 ```
 
 Then bump the version in **three** places and keep them identical:
@@ -59,8 +72,9 @@ composer install --no-dev --optimize-autoloader
 wp dist-archive . ./profitly.zip
 ```
 
-Inspect the zip before shipping — confirm `vendor/autoload.php` is present and
-that no `tests/`, `phpcs.xml.dist`, or `vendor/bin/` entries leaked in:
+Inspect the zip before shipping — confirm `vendor/autoload.php` and
+`vendor-prefixed/standalonetech/wp-telemetry/assets/js/popup.js` are present and
+that no `tests/`, `bin/`, `phpcs.xml.dist`, or `vendor/bin/` entries leaked in:
 
 ```bash
 unzip -l profitly.zip | less
@@ -111,10 +125,3 @@ runs `composer install --no-dev --optimize-autoloader` as a build step, then
 invokes the action with `SVN_USERNAME` / `SVN_PASSWORD` secrets. This removes
 the manual SVN steps above and guarantees the `.distignore` rules are applied
 consistently.
-
-## Future note: dependency collision safety
-
-Once Profitly gains real runtime Composer dependencies, consider scoping
-their namespaces with [php-scoper](https://github.com/humbug/php-scoper) or
-[Strauss](https://github.com/BrianHenryIE/strauss) so a shared library can't
-fatally collide with another plugin shipping the same package. Not needed today.

@@ -15,6 +15,13 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
+// Telemetry options and its cron event are removed unconditionally: they hold the site's
+// consent choice and anonymous ID, not store data.
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require_once __DIR__ . '/vendor/autoload.php';
+	\Profitly\Vendor\StandaloneTech\Telemetry\Client::cleanup( 'profitly' );
+}
+
 // Respect the opt-in flag. Default is false: leave all data intact.
 $profitly_settings = get_option( 'profitly_settings', array() );
 
