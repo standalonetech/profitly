@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Client {
 
-	public const VERSION = '1.0.0';
+	public const VERSION = '1.0.1';
 
 	private const REQUIRED = array( 'slug', 'name', 'version', 'plugin_file', 'server_url', 'privacy_url', 'settings_url' );
 

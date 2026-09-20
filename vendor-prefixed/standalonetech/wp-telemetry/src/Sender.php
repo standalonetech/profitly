@@ -13,7 +13,8 @@ namespace Profitly\Vendor\StandaloneTech\Telemetry;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Every request funnels through send(), which refuses unless consent is 'yes'.
+ * Every request funnels through send(), which refuses unless consent is 'yes'
+ * (except the user-initiated erasure request, see send()).
  */
 final class Sender {
 
@@ -87,7 +88,10 @@ final class Sender {
 	 * @return bool False when refused (no consent) or the request failed.
 	 */
 	private function send( string $event, array $payload, bool $blocking = false ): bool {
-		if ( ! in_array( $event, self::EVENTS, true ) || ! $this->client->consent()->is_granted() ) {
+		// Erasure is the one request that does not need consent: it only exists because the user once
+		// opted in (it needs a site ID), it is triggered by their explicit click, and it sends just the
+		// site ID and plugin slug. Every other event still refuses without consent.
+		if ( ! in_array( $event, self::EVENTS, true ) || ( 'delete' !== $event && ! $this->client->consent()->is_granted() ) ) {
 			return false;
 		}
 

@@ -64,12 +64,16 @@ final class Consent {
 	}
 
 	/**
-	 * Anonymous site ID; '' unless consent is 'yes'.
+	 * Anonymous site ID; '' when there is none.
+	 *
+	 * It exists from opt-in until the data is deleted. Withdrawing normally deletes it, so the
+	 * only time it outlives consent is after a withdrawal whose server erasure failed (kept so
+	 * "Delete my data" can retry). Nothing else is ever sent without consent, see Sender.
 	 *
 	 * @return string
 	 */
 	public function site_id(): string {
-		return $this->is_granted() ? (string) get_option( Client::option( $this->client->slug(), 'site_id' ), '' ) : '';
+		return (string) get_option( Client::option( $this->client->slug(), 'site_id' ), '' );
 	}
 
 	/**
@@ -91,12 +95,16 @@ final class Consent {
 
 	/**
 	 * Record a refusal or withdrawal: delete the site ID, stop the cron. Sends nothing.
+	 *
+	 * @param bool $keep_site_id Keep the ID so the server copy can still be deleted later.
 	 */
-	public function revoke(): void {
+	public function revoke( bool $keep_site_id = false ): void {
 		$slug = $this->client->slug();
 		update_option( Client::option( $slug, 'consent' ), 'no', false );
 		update_option( Client::option( $slug, 'consent_at' ), time(), false );
-		delete_option( Client::option( $slug, 'site_id' ) );
+		if ( ! $keep_site_id ) {
+			delete_option( Client::option( $slug, 'site_id' ) );
+		}
 
 		$this->client->cron()->unschedule();
 	}
@@ -146,7 +154,11 @@ final class Consent {
 			$this->grant();
 		} elseif ( $this->is_granted() ) {
 			// Unchecked while unset must stay unset: only an explicit "No thanks" or a withdrawal is a decision.
-			$this->revoke();
+			// Withdrawing also erases what the server holds. If it cannot be reached, stop sharing anyway
+			// (that right never depends on the network) but keep the ID so "Delete my data" can retry.
+			if ( ! $this->client->privacy()->delete_data() ) {
+				$this->revoke( true );
+			}
 		}
 	}
 

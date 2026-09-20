@@ -59,7 +59,7 @@ final class Privacy {
 			/* translators: 1: plugin name, 2: server host name. */
 			sprintf( __( 'Only if you allow it, %1$s sends anonymous usage data to %2$s: a random site ID, the plugin and its version, the WordPress, PHP and WooCommerce versions, your locale and whether the site is a multisite. This is sent when you allow it and then once a week.', 'profitly' ), $this->client->config( 'name' ), $host ),
 			__( 'If you deactivate the plugin and choose "Submit & Deactivate", your reason, optional comment and the number of days the plugin was active are sent as well. Choosing "Skip & Deactivate" sends nothing.', 'profitly' ),
-			__( 'It never sends your site address, admin email, user names, customer data or orders. Nothing is sent unless you allow it, and you can withdraw at any time in the plugin settings. You can also ask for the data already sent to be deleted there.', 'profitly' ),
+			__( 'It never sends your site address, admin email, user names, customer data or orders. Nothing is sent unless you allow it. You can withdraw at any time in the plugin settings, which also asks the server to delete the data already sent.', 'profitly' ),
 		);
 
 		wp_add_privacy_policy_content( $this->client->config( 'name' ), wp_kses_post( wpautop( implode( "\n\n", $paragraphs ) ) ) );
