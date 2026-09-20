@@ -142,7 +142,7 @@ No. Profit calculations for reports run in the admin area, not on your storefron
 
 == External services ==
 
-Profitly can send anonymous usage data to a server run by StandaloneTech (`https://telemetry.standalonetech.com`). **This is opt-in: nothing is sent, and no request is made, unless you tick "Usage data" in Profitly > Settings > General (or press "Allow" on the one-time notice).** You can turn it off at any time, and delete what was already sent with the "Delete my data" button on the same screen.
+Profitly can send anonymous usage data to a server run by StandaloneTech (`https://telemetry.standalonetech.com`). **This is opt-in: nothing is sent, and no request is made, unless you tick "Usage data" in Profitly > Settings > General (or press "Allow" on the one-time notice).** You can turn it off at any time, and turning it off also asks the server to delete the data already sent. The "Delete my data" button on the same screen does the same and tells you whether it worked. If you plan to uninstall Profitly, turn it off first.
 
 If you allow it, this is sent when you allow it, then once a week:
 
@@ -151,6 +151,8 @@ If you allow it, this is sent when you allow it, then once a week:
 * your site language (locale) and whether the site is a multisite
 
 If you allow it and then deactivate Profitly, choosing "Submit & Deactivate" in the deactivation window also sends the reason you picked, the optional comment you typed and the number of days Profitly was active. "Skip & Deactivate" and "Cancel" send nothing.
+
+As with any web request, the server can see your site's IP address. It is used only to rate-limit requests and is not stored; only a salted hash is kept, for up to an hour.
 
 Profitly never sends your site address, admin email, user names, customers, orders, products, costs or profit figures. See the [StandaloneTech privacy policy](https://standalonetech.com/privacy-policy/).
 
@@ -165,9 +167,8 @@ Profitly never sends your site address, admin email, user names, customers, orde
 
 == Changelog ==
 
-= 1.0.3 (Unreleased) =
-* Development in progress.
-* New: optional, opt-in anonymous usage data and deactivation feedback. Off by default; see "External services".
+= 1.0.3 (September 20, 2026) =
+* New: optional, opt-in anonymous usage data and deactivation feedback. Off by default, and turning it off deletes what was already sent; see "External services".
 
 = 1.0.2 (August 28, 2026) =
 * New: Profit Target Planner - enter a profit goal and see the revenue, orders, and daily pace required to hit it, based on your own historical margin.
@@ -197,6 +198,9 @@ Profitly never sends your site address, admin email, user names, customers, orde
 * HPOS and block checkout compatibility.
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+Adds optional, opt-in anonymous usage data (off by default). Nothing is sent unless you allow it.
 
 = 1.0.2 =
 Adds the Profit Target Planner. Update recommended.

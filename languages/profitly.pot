@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-20T05:42:28+00:00\n"
+"POT-Creation-Date: 2026-09-20T06:10:34+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: profitly\n"
@@ -642,36 +642,36 @@ msgid "Rest of the World"
 msgstr ""
 
 #. translators: %s: plugin name.
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:120
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:128
 #, php-format
 msgid "Share anonymous usage data to help improve %s."
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:124
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:132
 msgid "Plugin, WordPress and PHP versions and your locale. Never your site address, email or store data."
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:125
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:178
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:133
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:190
 #: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:165
 msgid "Privacy policy"
 msgstr ""
 
 #. translators: %s: plugin name.
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:176
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:188
 #, php-format
 msgid "Help improve %s? Allow it to send anonymous usage data: plugin, WordPress and PHP versions and your locale. It never sends your site address, email or store data, and nothing is sent unless you allow it."
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:184
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:196
 msgid "Allow"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:185
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:197
 msgid "No thanks"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:199
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:211
 #: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:107
 msgid "You do not have permission to do this."
 msgstr ""
@@ -753,7 +753,7 @@ msgid "If you deactivate the plugin and choose \"Submit & Deactivate\", your rea
 msgstr ""
 
 #: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:62
-msgid "It never sends your site address, admin email, user names, customer data or orders. Nothing is sent unless you allow it, and you can withdraw at any time in the plugin settings. You can also ask for the data already sent to be deleted there."
+msgid "It never sends your site address, admin email, user names, customer data or orders. Nothing is sent unless you allow it. You can withdraw at any time in the plugin settings, which also asks the server to delete the data already sent."
 msgstr ""
 
 #: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:79
