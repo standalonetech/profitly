@@ -4,7 +4,7 @@ Tags: profit, cost of goods, cogs, analytics, woocommerce
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -166,6 +166,9 @@ Profitly never sends your site address, admin email, user names, customers, orde
 6. Settings — gateway fees, shipping cost model, and general options.
 
 == Changelog ==
+
+= 1.0.4 (Unreleased) =
+* Development in progress.
 
 = 1.0.3 (September 20, 2026) =
 * New: optional, opt-in anonymous usage data and deactivation feedback. Off by default, and turning it off deletes what was already sent; see "External services".
