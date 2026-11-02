@@ -1,6 +1,6 @@
 <?php
 /**
- * Product-level cost-of-goods storage.
+ * Product-level cost-of-goods source.
  *
  * @package Profitly
  */
@@ -9,23 +9,27 @@ declare( strict_types=1 );
 
 namespace Profitly\COGS;
 
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use WC_Product;
+use WC_Product_Variation;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Reads, sanitises, and persists the cost of goods stored against products and
- * variations.
+ * Read adapter over WooCommerce's built-in Cost of Goods Sold field, plus the
+ * supplier name, which Profitly still stores itself.
  *
- * Its single responsibility is the product-meta data layer for COGS: the meta
- * key contract (`_profitly_cogs`, `_profitly_supplier`), value
- * sanitisation, and getters — including variation-to-parent fallback. UI
- * rendering lives in {@see \Profitly\Admin\ProductFields}.
+ * Product costs live in WooCommerce core; Profitly only reads them and freezes
+ * them onto orders ({@see OrderLineCOGS}). UI rendering for the supplier field
+ * lives in {@see \Profitly\Admin\ProductFields}.
  */
 final class ProductCOGS {
 
 	/**
-	 * Meta key holding the per-unit cost of goods (decimal string).
+	 * LEGACY meta key: the per-unit cost Profitly stored before 1.0.4.
+	 *
+	 * Read only by {@see LegacyCostMigration} and kept as the rollback copy. Never
+	 * read it for cost anywhere else.
 	 */
 	public const META_COGS = '_profitly_cogs';
 
@@ -35,16 +39,30 @@ final class ProductCOGS {
 	public const META_SUPPLIER = '_profitly_supplier';
 
 	/**
-	 * Hard upper bound for a single unit cost.
+	 * WooCommerce's feature id for Cost of Goods Sold.
 	 */
-	private const MAX_COST = 999999.99;
+	public const CORE_FEATURE = 'cost_of_goods_sold';
+
+	/**
+	 * The product's own cost wins.
+	 */
+	public const SOURCE_OWN = 'own';
+
+	/**
+	 * The parent product's cost wins (a variation inheriting it).
+	 */
+	public const SOURCE_PARENT = 'parent';
+
+	/**
+	 * Both costs count (a variation flagged as additive).
+	 */
+	public const SOURCE_BOTH = 'both';
 
 	/**
 	 * Register WordPress/WooCommerce hooks for this component.
 	 *
-	 * This data layer is hookless by default; saving is driven by the admin
-	 * field component. The method exists to satisfy the uniform component
-	 * contract called from {@see \Profitly\Plugin}.
+	 * This data layer is hookless by default. The method exists to satisfy the
+	 * uniform component contract called from {@see \Profitly\Plugin}.
 	 *
 	 * @return void
 	 */
@@ -53,39 +71,66 @@ final class ProductCOGS {
 	}
 
 	/**
-	 * Get the stored cost of goods for a product or variation.
+	 * Whether WooCommerce's Cost of Goods Sold feature exists and is turned on.
 	 *
-	 * @param int $product_id Product or variation ID.
-	 * @return string The cost as a decimal string; '0' when unset. Never null.
+	 * Check this before any core cost call: with the feature off those methods
+	 * return dummy values and log a "doing it wrong" notice.
+	 *
+	 * @return bool
 	 */
-	public static function get( int $product_id ): string {
-		$raw = get_post_meta( $product_id, self::META_COGS, true );
-
-		if ( '' === $raw || null === $raw || false === $raw ) {
-			return '0';
-		}
-
-		return wc_format_decimal( $raw, false, true );
+	public static function is_core_cogs_enabled(): bool {
+		return class_exists( FeaturesUtil::class )
+			&& is_callable( array( FeaturesUtil::class, 'feature_is_enabled' ) )
+			&& FeaturesUtil::feature_is_enabled( self::CORE_FEATURE );
 	}
 
 	/**
-	 * Get the cost of goods for a variation, falling back to its parent.
+	 * Get the resolved per-unit cost of a product or variation.
 	 *
-	 * When a variation has no cost of its own, the parent product's cost is
-	 * returned so variable products do not silently report zero cost.
+	 * The amount comes from core's own resolver, so it always matches the cost
+	 * WooCommerce itself would use, including third-party filters on it.
 	 *
-	 * @param int $variation_id Variation ID.
-	 * @param int $parent_id    Parent (variable) product ID.
-	 * @return string The cost as a decimal string; '0' when neither is set.
+	 * @param WC_Product $product The product or variation.
+	 * @return string|null The cost as a decimal string; null when no cost is set.
 	 */
-	public static function get_for_variation( int $variation_id, int $parent_id ): string {
-		$raw = get_post_meta( $variation_id, self::META_COGS, true );
-
-		if ( '' === $raw || null === $raw || false === $raw ) {
-			return self::get( $parent_id );
+	public static function get_unit_cost( WC_Product $product ): ?string {
+		if ( ! self::is_core_cogs_enabled() ) {
+			return null;
 		}
 
-		return wc_format_decimal( $raw, false, true );
+		$parent_value = null;
+		$additive     = false;
+
+		if ( $product instanceof WC_Product_Variation ) {
+			$parent       = wc_get_product( $product->get_parent_id() );
+			$parent_value = $parent instanceof WC_Product ? $parent->get_cogs_value() : null;
+			$additive     = $product->get_cogs_value_is_additive();
+		}
+
+		if ( null === self::resolve_cost_source( $product->get_cogs_value(), $parent_value, $additive ) ) {
+			return null;
+		}
+
+		return wc_format_decimal( $product->get_cogs_total_value(), false, true );
+	}
+
+	/**
+	 * Decide which cost values apply. Pure: no WordPress or WooCommerce calls.
+	 *
+	 * A zero is a real value: variations may genuinely cost nothing, so only null
+	 * counts as "not set".
+	 *
+	 * @param float|null $own         The product's or variation's own cost.
+	 * @param float|null $parent_cost The parent product's cost, when there is one.
+	 * @param bool       $additive    Whether the variation's cost adds to its parent's.
+	 * @return string|null One of the SOURCE_* constants; null when no cost is set.
+	 */
+	public static function resolve_cost_source( ?float $own, ?float $parent_cost, bool $additive ): ?string {
+		if ( null === $own ) {
+			return null === $parent_cost ? null : self::SOURCE_PARENT;
+		}
+
+		return $additive && null !== $parent_cost ? self::SOURCE_BOTH : self::SOURCE_OWN;
 	}
 
 	/**
@@ -101,24 +146,6 @@ final class ProductCOGS {
 	}
 
 	/**
-	 * Persist the cost of goods against a product or variation.
-	 *
-	 * The value is sanitised with {@see wc_format_decimal()}, forced
-	 * non-negative, and capped at the maximum allowed cost. Invalid input is
-	 * stored as '0'.
-	 *
-	 * @param WC_Product $product   Product or variation object.
-	 * @param mixed      $raw_value Raw user-supplied cost.
-	 * @return string The sanitised value that was stored.
-	 */
-	public static function save( WC_Product $product, $raw_value ): string {
-		$value = self::sanitize_cost( $raw_value );
-		$product->update_meta_data( self::META_COGS, $value );
-
-		return $value;
-	}
-
-	/**
 	 * Persist the supplier name against a product or variation.
 	 *
 	 * @param WC_Product $product   Product or variation object.
@@ -128,39 +155,6 @@ final class ProductCOGS {
 	public static function save_supplier( WC_Product $product, $raw_value ): string {
 		$value = is_scalar( $raw_value ) ? sanitize_text_field( (string) $raw_value ) : '';
 		$product->update_meta_data( self::META_SUPPLIER, $value );
-
-		return $value;
-	}
-
-	/**
-	 * Sanitise a raw cost value into a safe, bounded decimal string.
-	 *
-	 * @param mixed $raw_value Raw user-supplied cost.
-	 * @return string A non-negative decimal string no greater than MAX_COST.
-	 */
-	public static function sanitize_cost( $raw_value ): string {
-		// Guard against array/object input (e.g. a colliding $_POST key) before
-		// handing the value to WooCommerce, which expects a scalar.
-		if ( ! is_scalar( $raw_value ) ) {
-			return '0';
-		}
-
-		$value = wc_format_decimal( $raw_value, false, true );
-
-		if ( '' === $value || ! is_numeric( $value ) ) {
-			return '0';
-		}
-
-		// Clamp to the allowed range.
-		$numeric = (float) $value;
-
-		if ( $numeric < 0 ) {
-			return '0';
-		}
-
-		if ( $numeric > self::MAX_COST ) {
-			return wc_format_decimal( self::MAX_COST, false, true );
-		}
 
 		return $value;
 	}

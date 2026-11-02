@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Profitly — Profit Analytics for WooCommerce 1.0.3\n"
+"Project-Id-Version: Profitly — Profit Analytics for WooCommerce 1.0.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/profitly\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-20T06:10:34+00:00\n"
+"POT-Creation-Date: 2026-11-02T14:58:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: profitly\n"
@@ -41,6 +41,34 @@ msgstr ""
 
 #: profitly.php:43
 msgid "Profitly requires WooCommerce to be installed and active."
+msgstr ""
+
+#: src/Admin/CostSourceNotice.php:77
+msgid "Profitly needs WooCommerce 10.0 or newer for product costs. Please update WooCommerce."
+msgstr ""
+
+#: src/Admin/CostSourceNotice.php:79
+msgid "Profitly reads product costs from WooCommerce's built-in Cost of Goods Sold field, which is turned off. Turn it on to track profit."
+msgstr ""
+
+#: src/Admin/CostSourceNotice.php:83
+msgid "Your existing Profitly costs will be copied over automatically after you turn it on."
+msgstr ""
+
+#: src/Admin/CostSourceNotice.php:95
+msgid "Turn on cost tracking"
+msgstr ""
+
+#: src/Admin/CostSourceNotice.php:103
+msgid "Dismiss for 7 days"
+msgstr ""
+
+#: src/Admin/CostSourceNotice.php:121
+#: src/COGS/LegacyCostMigration.php:225
+#: src/COGS/LegacyCostMigration.php:248
+#: src/Settings/SettingsHandler.php:54
+#: src/Settings/SettingsPage.php:36
+msgid "You do not have permission to change Profitly settings."
 msgstr ""
 
 #: src/Admin/Menu.php:59
@@ -123,23 +151,13 @@ msgstr ""
 msgid "Leave blank to use the zone estimate snapshotted at order creation."
 msgstr ""
 
-#: src/Admin/ProductFields.php:68
-#: src/Admin/ProductFields.php:130
+#: src/Admin/ProductFields.php:61
+#: src/Admin/ProductFields.php:108
 msgid "Supplier name"
 msgstr ""
 
-#: src/Admin/ProductFields.php:70
+#: src/Admin/ProductFields.php:63
 msgid "Optional. Who you buy this product from."
-msgstr ""
-
-#. translators: %s: store currency symbol.
-#: src/Admin/ProductFields.php:170
-#, php-format
-msgid "Cost of Goods (per unit) (%s)"
-msgstr ""
-
-#: src/Admin/ProductFields.php:179
-msgid "Your actual cost to acquire or produce one unit. Used to calculate profit. Changing this value does NOT affect past orders."
 msgstr ""
 
 #: src/Admin/ProductListColumn.php:72
@@ -149,6 +167,58 @@ msgstr ""
 
 #: src/Admin/ProductListColumn.php:116
 msgid "Avg:"
+msgstr ""
+
+#: src/COGS/LegacyCostMigration.php:213
+msgid "Copy old Profitly costs again"
+msgstr ""
+
+#: src/COGS/LegacyCostMigration.php:214
+msgid "Copies your old Profitly costs into WooCommerce's Cost field. Costs already set in WooCommerce are not changed."
+msgstr ""
+
+#: src/COGS/LegacyCostMigration.php:282
+msgid "Profitly is copying your old product costs into WooCommerce's Cost field…"
+msgstr ""
+
+#. translators: %s: number of products.
+#: src/COGS/LegacyCostMigration.php:300
+#, php-format
+msgid "Copied costs for %s product."
+msgid_plural "Copied costs for %s products."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of products.
+#: src/COGS/LegacyCostMigration.php:308
+#, php-format
+msgid "%s already matched."
+msgstr ""
+
+#. translators: %s: number of products.
+#: src/COGS/LegacyCostMigration.php:321
+#, php-format
+msgid "%s product already had a different cost in WooCommerce, so we kept WooCommerce's value — please check it:"
+msgid_plural "%s products already had a different cost in WooCommerce, so we kept WooCommerce's value — please check them:"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: number of products.
+#: src/COGS/LegacyCostMigration.php:340
+#, php-format
+msgid "%s product could not be copied:"
+msgid_plural "%s products could not be copied:"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/COGS/LegacyCostMigration.php:356
+msgid "Dismiss"
+msgstr ""
+
+#. translators: %s: number of further products not listed.
+#: src/COGS/LegacyCostMigration.php:384
+#, php-format
+msgid "and %s more"
 msgstr ""
 
 #: src/Dashboard/DashboardWidget.php:69
@@ -536,11 +606,6 @@ msgstr ""
 msgid "No product sales in this period."
 msgstr ""
 
-#: src/Settings/SettingsHandler.php:54
-#: src/Settings/SettingsPage.php:36
-msgid "You do not have permission to change Profitly settings."
-msgstr ""
-
 #: src/Settings/SettingsHandler.php:83
 msgid "Settings saved."
 msgstr ""
@@ -585,24 +650,20 @@ msgstr ""
 msgid "Product subtotal only"
 msgstr ""
 
-#: src/Settings/Tabs/GeneralTab.php:34
+#: src/Settings/Tabs/GeneralTab.php:32
 msgid "General"
 msgstr ""
 
-#: src/Settings/Tabs/GeneralTab.php:48
+#: src/Settings/Tabs/GeneralTab.php:46
 msgid "Data retention"
 msgstr ""
 
-#: src/Settings/Tabs/GeneralTab.php:53
+#: src/Settings/Tabs/GeneralTab.php:51
 msgid "Delete all Profitly data when this plugin is uninstalled"
 msgstr ""
 
-#: src/Settings/Tabs/GeneralTab.php:55
+#: src/Settings/Tabs/GeneralTab.php:53
 msgid "When enabled, uninstalling Profitly will permanently remove all COGS data, settings, and order profit snapshots. This cannot be undone."
-msgstr ""
-
-#: src/Settings/Tabs/GeneralTab.php:62
-msgid "Usage data"
 msgstr ""
 
 #: src/Settings/Tabs/ShippingCostsTab.php:40
@@ -641,129 +702,90 @@ msgstr ""
 msgid "Rest of the World"
 msgstr ""
 
-#. translators: %s: plugin name.
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:128
-#, php-format
-msgid "Share anonymous usage data to help improve %s."
-msgstr ""
-
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:132
-msgid "Plugin, WordPress and PHP versions and your locale. Never your site address, email or store data."
-msgstr ""
-
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:133
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:190
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:165
-msgid "Privacy policy"
-msgstr ""
-
-#. translators: %s: plugin name.
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:188
-#, php-format
-msgid "Help improve %s? Allow it to send anonymous usage data: plugin, WordPress and PHP versions and your locale. It never sends your site address, email or store data, and nothing is sent unless you allow it."
-msgstr ""
-
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:196
-msgid "Allow"
-msgstr ""
-
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:197
-msgid "No thanks"
-msgstr ""
-
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Consent.php:211
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:107
-msgid "You do not have permission to do this."
-msgstr ""
-
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:56
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:55
 msgid "I found a better plugin"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:57
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:56
 msgid "It is missing a feature I need"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:58
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:57
 msgid "It is not working as expected"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:59
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:58
 msgid "It is too complex to use"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:60
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:59
 msgid "It is a temporary deactivation"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:61
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:60
 msgid "I no longer need it"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:62
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:61
 msgid "Other"
 msgstr ""
 
 #. translators: %s: plugin name.
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:138
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:135
 #, php-format
 msgid "Quick feedback about %s"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:141
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:138
 msgid "Why are you deactivating? Your answer is optional."
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:143
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:140
 msgid "Reason for deactivating"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:153
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:150
 msgid "Need a hand? Contact support."
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:156
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:153
 msgid "Anything else? (optional)"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:159
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:156
 msgid "Submit & Deactivate"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:160
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:157
 msgid "Skip & Deactivate"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:161
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:158
 msgid "Cancel"
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:164
-msgid "Submitting sends your reason and comment, days active, an anonymous site ID, plugin, WordPress and PHP versions and your locale. Never your site address, email or store data. Skip and Cancel send nothing."
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:161
+msgid "Submit sends your reason and comment, the number of days the plugin was active, the plugin name and version, the WordPress and PHP versions, the WooCommerce version (if active), your site language and whether the site is a multisite. Never your site address, email, or user or store data. Skip and Cancel send nothing."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:162
+msgid "Please don't include personal details in the comment."
+msgstr ""
+
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Popup.php:163
+msgid "Privacy policy"
 msgstr ""
 
 #. translators: 1: plugin name, 2: server host name.
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:60
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:56
 #, php-format
-msgid "Only if you allow it, %1$s sends anonymous usage data to %2$s: a random site ID, the plugin and its version, the WordPress, PHP and WooCommerce versions, your locale and whether the site is a multisite. This is sent when you allow it and then once a week."
+msgid "%1$s sends data to %2$s only when a user deactivates the plugin and clicks \"Submit & Deactivate\" in the feedback popup. \"Skip & Deactivate\" and \"Cancel\" send nothing."
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:61
-msgid "If you deactivate the plugin and choose \"Submit & Deactivate\", your reason, optional comment and the number of days the plugin was active are sent as well. Choosing \"Skip & Deactivate\" sends nothing."
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:57
+msgid "Submitting sends the selected reason, the optional comment (up to 500 characters), the number of days the plugin was active, the plugin name and version, the WordPress and PHP versions, the WooCommerce version if active, the site language and whether the site is a multisite. Users are asked not to include personal details in the comment."
 msgstr ""
 
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:62
-msgid "It never sends your site address, admin email, user names, customer data or orders. Nothing is sent unless you allow it. You can withdraw at any time in the plugin settings, which also asks the server to delete the data already sent."
-msgstr ""
-
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:79
-msgid "Delete my data"
-msgstr ""
-
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:129
-msgid "Your usage data was deleted and sharing is now off."
-msgstr ""
-
-#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:129
-msgid "The server could not be reached, so nothing was deleted. Please try again later."
+#: vendor-prefixed/standalonetech/wp-telemetry/src/Privacy.php:58
+msgid "It does not send the site address, admin email, user names, customer data or orders. As with any web request, the receiving server can see the IP address of the server hosting this site."
 msgstr ""

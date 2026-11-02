@@ -15,8 +15,8 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-// Telemetry options and its cron event are removed unconditionally: they hold the site's
-// consent choice and anonymous ID, not store data.
+// Telemetry options are removed unconditionally, along with any 1.x options and cron
+// event: they hold the popup's local bookkeeping, not store data.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 	\Profitly\Vendor\StandaloneTech\Telemetry\Client::cleanup( 'profitly' );
@@ -45,3 +45,12 @@ $wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 delete_option( 'profitly_settings' );
 delete_option( 'profitly_version' );
 delete_option( 'profitly_report_cache_version' );
+delete_option( 'profitly_cogs_migration' );
+
+// Remove the per-user "dismissed until" stamp of the cost source notice.
+delete_metadata( 'user', 0, '_profitly_cost_notice_dismissed_until', '', true );
+
+// Drop any queued migration batch. WooCommerce may already be gone at this point.
+if ( function_exists( 'as_unschedule_all_actions' ) ) {
+	as_unschedule_all_actions( 'profitly_migrate_legacy_cogs' );
+}

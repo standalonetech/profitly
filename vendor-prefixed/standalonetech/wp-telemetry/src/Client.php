@@ -5,7 +5,7 @@
  * @package StandaloneTech\Telemetry
  *
  * @license GPL-2.0-or-later
- * Modified by profitly on 20-September-2026 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by profitly on 02-November-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Profitly\Vendor\StandaloneTech\Telemetry;
@@ -13,16 +13,23 @@ namespace Profitly\Vendor\StandaloneTech\Telemetry;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Holds a plugin's config and wires up the telemetry components.
+ * Holds a plugin's config and wires up the deactivation feedback components.
  *
- * Everything (options, cron hook, AJAX actions) is namespaced by slug, so two
- * plugins using this library never share state or consent.
+ * Everything (options, AJAX actions) is namespaced by slug, so two plugins using
+ * this library never share state.
  */
 final class Client {
 
-	public const VERSION = '1.0.1';
+	public const VERSION = '2.0.0';
 
-	private const REQUIRED = array( 'slug', 'name', 'version', 'plugin_file', 'server_url', 'privacy_url', 'settings_url' );
+	private const SCHEMA = 2;
+
+	private const REQUIRED = array( 'slug', 'name', 'version', 'plugin_file', 'server_url', 'privacy_url' );
+
+	/**
+	 * Option suffixes left behind by 1.x.
+	 */
+	private const LEGACY_OPTIONS = array( 'consent', 'consent_at', 'site_id' );
 
 	/**
 	 * Initialised clients, keyed by slug.
@@ -39,13 +46,6 @@ final class Client {
 	private $config;
 
 	/**
-	 * Components.
-	 *
-	 * @var Consent
-	 */
-	private $consent;
-
-	/**
 	 * Payload builder.
 	 *
 	 * @var Collector
@@ -58,13 +58,6 @@ final class Client {
 	 * @var Sender
 	 */
 	private $sender;
-
-	/**
-	 * Weekly ping scheduler.
-	 *
-	 * @var Cron
-	 */
-	private $cron;
 
 	/**
 	 * Deactivation popup.
@@ -94,22 +87,20 @@ final class Client {
 	 */
 	private function __construct( array $config ) {
 		$this->config    = $config;
-		$this->consent   = new Consent( $this );
 		$this->collector = new Collector( $this );
 		$this->sender    = new Sender( $this );
-		$this->cron      = new Cron( $this );
 		$this->popup     = new Popup( $this );
 		$this->ajax      = new Ajax( $this );
 		$this->privacy   = new Privacy( $this );
 	}
 
 	/**
-	 * Initialise telemetry for a plugin. Call once from the plugin's main file.
+	 * Initialise the feedback popup for a plugin. Call once from the plugin's main file.
 	 *
 	 * Required keys: slug, name, version, plugin_file, server_url (https),
-	 * privacy_url, settings_url. Optional: text_domain (defaults to slug),
-	 * support_url (shown when "not working" is chosen in the popup), admin_pages
-	 * (list of `page` slugs where the consent notice may also appear).
+	 * privacy_url. Optional: text_domain (defaults to slug), support_url (shown
+	 * when "not working" is chosen in the popup). The 1.x keys settings_url and
+	 * admin_pages are accepted and ignored.
 	 *
 	 * @param array<string, mixed> $config Plugin config.
 	 * @return Client|null Null when the config is invalid (nothing is hooked).
@@ -130,7 +121,7 @@ final class Client {
 	}
 
 	/**
-	 * Get an initialised client, e.g. to render the consent checkbox.
+	 * Get an initialised client.
 	 *
 	 * @param string $slug Plugin slug.
 	 * @return Client|null
@@ -140,7 +131,7 @@ final class Client {
 	}
 
 	/**
-	 * Remove every option and cron event for a slug. Call from uninstall.php.
+	 * Remove every option for a slug, and all 1.x leftovers. Call from uninstall.php.
 	 *
 	 * Needs only the slug, because the plugin is not loaded during uninstall.
 	 * On multisite, call it inside the plugin's per-site uninstall loop.
@@ -150,14 +141,13 @@ final class Client {
 	public static function cleanup( string $slug ): void {
 		$slug = sanitize_key( $slug );
 
-		foreach ( array( 'consent', 'consent_at', 'site_id', 'activated_at' ) as $suffix ) {
-			delete_option( self::option( $slug, $suffix ) );
-		}
-		wp_clear_scheduled_hook( Cron::hook( $slug ) );
+		self::remove_legacy( $slug );
+		delete_option( self::option( $slug, 'activated_at' ) );
+		delete_option( self::option( $slug, 'schema' ) );
 	}
 
 	/**
-	 * Option name for a slug, e.g. terawallet_tele_consent.
+	 * Option name for a slug, e.g. terawallet_tele_activated_at.
 	 *
 	 * @param string $slug   Plugin slug.
 	 * @param string $suffix Option suffix.
@@ -178,30 +168,12 @@ final class Client {
 	}
 
 	/**
-	 * Extra admin `page` slugs where the consent notice may appear.
-	 *
-	 * @return string[]
-	 */
-	public function admin_pages(): array {
-		return is_array( $this->config['admin_pages'] ) ? $this->config['admin_pages'] : array();
-	}
-
-	/**
 	 * Plugin slug.
 	 *
 	 * @return string
 	 */
 	public function slug(): string {
 		return $this->config['slug'];
-	}
-
-	/**
-	 * Consent component.
-	 *
-	 * @return Consent
-	 */
-	public function consent(): Consent {
-		return $this->consent;
 	}
 
 	/**
@@ -223,15 +195,6 @@ final class Client {
 	}
 
 	/**
-	 * Cron scheduler.
-	 *
-	 * @return Cron
-	 */
-	public function cron(): Cron {
-		return $this->cron;
-	}
-
-	/**
 	 * Popup.
 	 *
 	 * @return Popup
@@ -241,7 +204,7 @@ final class Client {
 	}
 
 	/**
-	 * Privacy helpers (delete button, policy text).
+	 * Privacy helpers (policy text).
 	 *
 	 * @return Privacy
 	 */
@@ -270,13 +233,25 @@ final class Client {
 	 * Hook everything up. Registration only; no request is made here.
 	 */
 	private function register(): void {
+		add_action( 'admin_init', array( $this, 'migrate' ) );
 		add_action( 'admin_init', array( $this, 'stamp_activation' ) );
 
-		$this->consent->register();
-		$this->cron->register();
 		$this->popup->register();
 		$this->ajax->register();
 		$this->privacy->register();
+	}
+
+	/**
+	 * One-time removal of 1.x data from this site. Sends nothing.
+	 */
+	public function migrate(): void {
+		$option = self::option( $this->slug(), 'schema' );
+		if ( (int) get_option( $option, 0 ) >= self::SCHEMA ) {
+			return;
+		}
+
+		self::remove_legacy( $this->slug() );
+		update_option( $option, self::SCHEMA );
 	}
 
 	/**
@@ -284,6 +259,18 @@ final class Client {
 	 */
 	public function stamp_activation(): void {
 		add_option( self::option( $this->slug(), 'activated_at' ), time() );
+	}
+
+	/**
+	 * Remove the 1.x options and weekly ping for a slug.
+	 *
+	 * @param string $slug Plugin slug.
+	 */
+	private static function remove_legacy( string $slug ): void {
+		foreach ( self::LEGACY_OPTIONS as $suffix ) {
+			delete_option( self::option( $slug, $suffix ) );
+		}
+		wp_clear_scheduled_hook( 'sts_telemetry_' . $slug . '_ping' );
 	}
 
 	/**
@@ -308,12 +295,12 @@ final class Client {
 			return null;
 		}
 
+		// Passed by plugins written for 1.x; no longer used.
+		unset( $config['settings_url'], $config['admin_pages'] );
+
 		$config['server_url']  = untrailingslashit( $config['server_url'] );
 		$config['text_domain'] = ! empty( $config['text_domain'] ) ? $config['text_domain'] : $config['slug'];
 		$config['support_url'] = $config['support_url'] ?? '';
-		$config['admin_pages'] = isset( $config['admin_pages'] ) && is_array( $config['admin_pages'] )
-			? array_values( array_filter( array_map( 'sanitize_key', array_map( 'strval', $config['admin_pages'] ) ) ) )
-			: array();
 
 		return $config;
 	}

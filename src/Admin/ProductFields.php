@@ -1,6 +1,6 @@
 <?php
 /**
- * Cost-of-goods product editor fields.
+ * Supplier product editor fields.
  *
  * @package Profitly
  */
@@ -15,12 +15,13 @@ use WC_Product;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Renders and saves the cost-of-goods inputs in the WooCommerce product editor.
+ * Renders and saves the supplier input in the WooCommerce product editor.
  *
- * Its single responsibility is the admin UI for COGS: drawing the cost and
- * supplier fields for simple products and each variation, and routing the
- * submitted values into the {@see ProductCOGS} data layer. It holds no storage
- * logic of its own.
+ * Product costs are entered in WooCommerce's own Cost field. This class draws the
+ * supplier field for simple products and each variation, only while that Cost field
+ * is turned on, and routes the submitted value into the {@see ProductCOGS} data
+ * layer. It holds no storage logic of its own. Saved names stay stored while hidden:
+ * the save handlers only write a field that was actually posted.
  */
 final class ProductFields {
 
@@ -40,26 +41,18 @@ final class ProductFields {
 	}
 
 	/**
-	 * Render the COGS and supplier fields for a simple product.
+	 * Render the supplier field for a simple product.
 	 *
 	 * @return void
 	 */
 	public function render_simple_fields(): void {
+		if ( ! ProductCOGS::is_core_cogs_enabled() ) {
+			return;
+		}
+
 		global $post;
 
 		$product_id = isset( $post->ID ) ? (int) $post->ID : 0;
-
-		woocommerce_wp_text_input(
-			array(
-				'id'            => ProductCOGS::META_COGS,
-				'value'         => ProductCOGS::get( $product_id ),
-				'label'         => $this->cost_label(),
-				'data_type'     => 'price',
-				'desc_tip'      => true,
-				'description'   => $this->cost_tooltip(),
-				'wrapper_class' => 'profitly-cogs-field',
-			)
-		);
 
 		woocommerce_wp_text_input(
 			array(
@@ -74,20 +67,16 @@ final class ProductFields {
 	}
 
 	/**
-	 * Save the COGS and supplier fields for a simple product.
+	 * Save the supplier field for a simple product.
 	 *
 	 * @param WC_Product $product The product being saved.
 	 * @return void
 	 */
 	public function save_simple_fields( WC_Product $product ): void {
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the product editor nonce before this hook.
-		// On variable products the variation rows post these same keys as
-		// arrays (name="_profitly_cogs[loop]"). Those belong to the
-		// per-variation save path, so only handle scalar values here.
-		if ( isset( $_POST[ ProductCOGS::META_COGS ] ) && is_scalar( $_POST[ ProductCOGS::META_COGS ] ) ) {
-			ProductCOGS::save( $product, wp_unslash( $_POST[ ProductCOGS::META_COGS ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- Sanitised inside ProductCOGS::save().
-		}
-
+		// On variable products the variation rows post this same key as an array
+		// (name="_profitly_supplier[loop]"). That belongs to the per-variation save
+		// path, so only handle a scalar value here.
 		if ( isset( $_POST[ ProductCOGS::META_SUPPLIER ] ) && is_scalar( $_POST[ ProductCOGS::META_SUPPLIER ] ) ) {
 			ProductCOGS::save_supplier( $product, wp_unslash( $_POST[ ProductCOGS::META_SUPPLIER ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- Sanitised inside ProductCOGS::save_supplier().
 		}
@@ -95,7 +84,7 @@ final class ProductFields {
 	}
 
 	/**
-	 * Render the COGS and supplier fields for a single variation.
+	 * Render the supplier field for a single variation.
 	 *
 	 * @param int                  $loop           Position of the variation in the editor loop.
 	 * @param array<string, mixed> $variation_data Variation data (unused).
@@ -105,22 +94,11 @@ final class ProductFields {
 	public function render_variation_fields( int $loop, array $variation_data, \WP_Post $variation ): void {
 		unset( $variation_data );
 
-		$variation_id = (int) $variation->ID;
-		$parent_id    = (int) $variation->post_parent;
+		if ( ! ProductCOGS::is_core_cogs_enabled() ) {
+			return;
+		}
 
-		woocommerce_wp_text_input(
-			array(
-				'id'            => ProductCOGS::META_COGS . '_' . $loop,
-				'name'          => ProductCOGS::META_COGS . '[' . $loop . ']',
-				'value'         => get_post_meta( $variation_id, ProductCOGS::META_COGS, true ),
-				'label'         => $this->cost_label(),
-				'data_type'     => 'price',
-				'desc_tip'      => true,
-				'description'   => $this->cost_tooltip(),
-				'wrapper_class' => 'form-row form-row-first profitly-cogs-field',
-				'placeholder'   => ProductCOGS::get( $parent_id ),
-			)
-		);
+		$variation_id = (int) $variation->ID;
 
 		woocommerce_wp_text_input(
 			array(
@@ -128,13 +106,13 @@ final class ProductFields {
 				'name'          => ProductCOGS::META_SUPPLIER . '[' . $loop . ']',
 				'value'         => get_post_meta( $variation_id, ProductCOGS::META_SUPPLIER, true ),
 				'label'         => __( 'Supplier name', 'profitly' ),
-				'wrapper_class' => 'form-row form-row-last profitly-supplier-field',
+				'wrapper_class' => 'form-row form-row-full profitly-supplier-field',
 			)
 		);
 	}
 
 	/**
-	 * Save the COGS and supplier fields for a single variation.
+	 * Save the supplier field for a single variation.
 	 *
 	 * @param int $variation_id The variation post ID.
 	 * @param int $loop         Position of the variation in the editor loop.
@@ -148,34 +126,11 @@ final class ProductFields {
 		}
 
 		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the variation save nonce before this hook.
-		if ( isset( $_POST[ ProductCOGS::META_COGS ][ $loop ] ) ) {
-			ProductCOGS::save( $variation, wp_unslash( $_POST[ ProductCOGS::META_COGS ][ $loop ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- Sanitised inside ProductCOGS::save().
-		}
-
 		if ( isset( $_POST[ ProductCOGS::META_SUPPLIER ][ $loop ] ) ) {
 			ProductCOGS::save_supplier( $variation, wp_unslash( $_POST[ ProductCOGS::META_SUPPLIER ][ $loop ] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- Sanitised inside ProductCOGS::save_supplier().
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		$variation->save();
-	}
-
-	/**
-	 * Build the cost field label with the store currency symbol.
-	 *
-	 * @return string Escaped, translated label including the currency symbol.
-	 */
-	private function cost_label(): string {
-		/* translators: %s: store currency symbol. */
-		return sprintf( __( 'Cost of Goods (per unit) (%s)', 'profitly' ), get_woocommerce_currency_symbol() );
-	}
-
-	/**
-	 * The shared help tooltip for the cost field.
-	 *
-	 * @return string Translated tooltip text.
-	 */
-	private function cost_tooltip(): string {
-		return __( 'Your actual cost to acquire or produce one unit. Used to calculate profit. Changing this value does NOT affect past orders.', 'profitly' );
 	}
 }

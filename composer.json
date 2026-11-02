@@ -12,7 +12,7 @@
 		"szepeviktor/phpstan-wordpress": "^2.0",
 		"php-stubs/woocommerce-stubs": "^9.0",
 		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
-		"standalonetech/wp-telemetry": "^1.0",
+		"standalonetech/wp-telemetry": "^2.0",
 		"brianhenryie/strauss": "^0.19"
 	},
 	"autoload": {

@@ -47,11 +47,12 @@ final class ProductMarginCalculator {
 	 * @return array{cogs: string, price: string, margin_amount: string, margin_percent: string}|null
 	 */
 	private static function simple_margin( WC_Product $product ): ?array {
-		if ( ! self::has_cogs( $product ) ) {
+		$cogs = ProductCOGS::get_unit_cost( $product );
+
+		if ( null === $cogs ) {
 			return null;
 		}
 
-		$cogs  = ProductCOGS::get( $product->get_id() );
 		$price = wc_format_decimal( (string) $product->get_price(), 2 );
 
 		return self::build( $cogs, $price );
@@ -71,11 +72,12 @@ final class ProductMarginCalculator {
 		foreach ( $product->get_children() as $variation_id ) {
 			$variation = wc_get_product( $variation_id );
 
-			if ( ! $variation instanceof WC_Product || ! self::has_cogs( $variation ) ) {
+			$cogs = $variation instanceof WC_Product ? ProductCOGS::get_unit_cost( $variation ) : null;
+
+			if ( null === $cogs ) {
 				continue;
 			}
 
-			$cogs  = ProductCOGS::get( $variation->get_id() );
 			$price = wc_format_decimal( (string) $variation->get_price(), 2 );
 			$row   = self::build( $cogs, $price );
 
@@ -144,18 +146,5 @@ final class ProductMarginCalculator {
 	 */
 	private static function average( array $values, int $count ): string {
 		return COGSCalculator::divide( COGSCalculator::sum( $values ), (string) $count, 2 );
-	}
-
-	/**
-	 * Determine whether a product/variation has a COGS value explicitly set.
-	 *
-	 * Distinct from {@see ProductCOGS::get()}, which returns '0' for unset — a
-	 * genuine zero cost is treated as "set" here.
-	 *
-	 * @param WC_Product $product The product or variation.
-	 * @return bool True when the COGS meta exists.
-	 */
-	private static function has_cogs( WC_Product $product ): bool {
-		return '' !== (string) $product->get_meta( ProductCOGS::META_COGS, true );
 	}
 }

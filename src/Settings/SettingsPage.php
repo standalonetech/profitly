@@ -10,8 +10,8 @@ declare( strict_types=1 );
 namespace Profitly\Settings;
 
 use Profitly\Admin\Menu;
+use Profitly\COGS\LegacyCostMigration;
 use Profitly\Constants;
-use Profitly\Telemetry\Telemetry;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -83,10 +83,9 @@ final class SettingsPage {
 
 		echo '</form>';
 
-		// Its own form, so it must sit outside the settings form (forms cannot nest).
-		$telemetry = 'general' === $current ? Telemetry::client() : null;
-		if ( null !== $telemetry ) {
-			$telemetry->privacy()->render_delete_button();
+		// Has its own form, so must sit outside the settings form (forms cannot nest).
+		if ( 'general' === $current ) {
+			LegacyCostMigration::render_copy_again_button();
 		}
 
 		echo '</div>';

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Profitly is a WooCommerce extension that tracks the *real* profit of a store by
 capturing cost of goods (COGS), gateway fees, and shipping costs and **snapshotting**
-them onto historical orders. Requires WordPress 6.4+, PHP 7.4+, WooCommerce 8.2+.
+them onto historical orders. Requires WordPress 6.4+, PHP 7.4+, WooCommerce 10.0+.
 
 ## Commands
 
@@ -25,7 +25,8 @@ Tests live in `tests/` (PSR-4 maps `Profitly\Tests\` → `tests/`), configured b
 `phpunit.xml.dist` with `tests/bootstrap.php`. The bootstrap **defines `ABSPATH` before
 loading the autoloader** — every `src/` class guards itself with `defined( 'ABSPATH' ) || exit;`,
 so without this the file under test would terminate the run. The suite currently covers the
-pure, WordPress-free units (`tests/Unit/` — `COGSCalculator` and `ProfitTargetCalculator`); WP/WooCommerce-coupled
+pure, WordPress-free units (`tests/Unit/` — `COGSCalculator`, `ProfitTargetCalculator`, and the
+pure decision methods of `ProductCOGS` and `LegacyCostMigration`); WP/WooCommerce-coupled
 classes would need a WP test harness (e.g. wp-phpunit / Brain Monkey) that is not yet set up.
 `composer test` runs PHPUnit; PHPStan scans `src/` only with WooCommerce stubs. After any code
 change, run `composer lint && composer analyze && composer test` before considering the work done;
@@ -53,7 +54,12 @@ are frozen onto orders **at creation time** and read back later:
 
 - `COGS/OrderLineCOGS` — snapshots per-unit & line-total COGS onto each line item across
   *all* order paths (classic checkout, Blocks, admin, REST, programmatic) via multiple
-  hooks plus a `woocommerce_before_order_object_save` backfill safety net.
+  hooks plus a `woocommerce_before_order_object_save` backfill safety net. When no cost is
+  known it writes the `META_MISSING` flag instead of a `'0'` (reports still count the line as
+  zero); items with either a snapshot or the flag are never re-snapshotted. Core rewrites item
+  costs from the *current* product cost on every `calculate_totals()`, so the
+  `woocommerce_calculated_order_item_cogs_value` filter returns the frozen total instead.
+  Refund items use the refunded line's frozen unit cost × their (negative) quantity.
 - `Profit/OrderSnapshot` — at order creation, freezes the chosen gateway's fee config and
   the destination zone's shipping estimate + shipping model onto order meta. The write is
   **idempotent**: an order already carrying a snapshot is left untouched.
@@ -62,6 +68,20 @@ All order access uses the WooCommerce CRUD API (`$order->get_meta()` /
 `update_meta_data()`), never direct post meta — this is what makes the plugin **HPOS-safe**
 (`Compatibility/HPOS` declares compatibility). Meta keys are prefixed `_profitly_*` and
 defined as class constants (e.g. `OrderLineCOGS::META_UNIT`, `ShippingCostResolver::META_SNAPSHOT`).
+
+### Product cost source
+Product costs live in WooCommerce core's Cost of Goods Sold field (feature `cost_of_goods_sold`,
+off by default, never enabled programmatically). `COGS/ProductCOGS` is a read adapter:
+`get_unit_cost()` returns a decimal string, or null when no cost is set (feature off included).
+Always check `ProductCOGS::is_core_cogs_enabled()` before a core cost call: with the feature off
+they return dummy values and log `doing_it_wrong`. `Admin/CostSourceNotice` asks store managers to
+turn the feature on (it can't be dismissed on Profitly's own screens; elsewhere for 7 days).
+
+`COGS/LegacyCostMigration` copies the pre-1.0.4 `_profitly_cogs` meta (`ProductCOGS::META_COGS`)
+into core's field in Action Scheduler batches once the feature is on, tracking state in the
+`profitly_cogs_migration` option. It never overwrites a core value and never changes the legacy
+meta, which stays as the rollback copy; nothing else may read that key for cost. A legacy `'0'`
+means "not set", because the old form saved `'0'` for an empty box.
 
 ### Money math
 `COGS/COGSCalculator` is stateless, WordPress-free, decimal-**string** arithmetic using
@@ -117,17 +137,21 @@ baseline aggregation (same `ReportCache`, same key shape as `ReportsPage`), and 
 result to `Planner/Views/profit-target-page.php`. All input arrives via GET on a read-only
 screen, so there is no nonce — the same rationale as the report range selector.
 
-### Telemetry (opt-in usage data)
+### Telemetry (deactivation feedback popup)
 `Telemetry/Telemetry` configures the StandaloneTech Telemetry client (private repo
-`standalonetech/wp-telemetry`) from `Plugin::boot()` and exposes `Telemetry::client()` to the
-Settings > General checkbox and "Delete my data" button. **Nothing is ever sent without consent**
-(unset = no); the library enforces this in its single `Sender`, never add a request elsewhere.
+`standalonetech/wp-telemetry`, v2) from `Plugin::boot()`. The library only shows a popup when
+Profitly is deactivated on the Plugins screen. **Data is sent only when the user clicks
+"Submit & Deactivate"**; Skip, Cancel and everything else send nothing. All sending goes through
+the library's single `Sender`, never add a request elsewhere. There is no consent setting, ping,
+site ID or "Delete my data" any more.
 The library is consumed through **Strauss**: it and Strauss are `require-dev`, and the generated
 `vendor-prefixed/` (namespace `Profitly\Vendor\StandaloneTech\Telemetry`) is **committed** and is
-what ships. Never edit it by hand; bump the library and run `composer prefix`, which also copies
-`assets/`, normalises permissions and pins the text domain to `'profitly'` so `wp i18n make-pot`
-picks up its strings. `uninstall.php` always calls `Client::cleanup( 'profitly' )`. The `readme.txt`
-"External services" section must stay accurate with what the library sends.
+what ships. Never edit it by hand. To bump the library, delete `vendor-prefixed/standalonetech/`
+first (Strauss does not remove old files), then run `composer update standalonetech/wp-telemetry`
+and `composer prefix`, which also copies `assets/`, normalises permissions and pins the text domain
+to `'profitly'` so `wp i18n make-pot` picks up its strings. `uninstall.php` always calls
+`Client::cleanup( 'profitly' )`. The `readme.txt` "External services" section must stay accurate
+with what the library sends.
 
 ### Capabilities
 Two caps gate everything (`Constants`): `view_woocommerce_reports` for read-only screens
@@ -145,7 +169,7 @@ Two caps gate everything (`Constants`): `view_woocommerce_reports` for read-only
 | Reporting & aggregation | `src/Reports/` (+ `Views/`) |
 | Profit Target Planner | `src/Planner/` (+ `Views/`) |
 | Dashboard widget | `src/Dashboard/` |
-| Telemetry wiring + prefixed library | `src/Telemetry/`, `vendor-prefixed/` (generated, committed), `bin/post-prefix.php` |
+| Deactivation feedback wiring + prefixed library | `src/Telemetry/`, `vendor-prefixed/` (generated, committed), `bin/post-prefix.php` |
 | CSV export | `src/Export/` |
 | Settings | `src/Settings/`, `src/Settings/Tabs/` |
 | Admin menu, product fields, meta boxes | `src/Admin/` |

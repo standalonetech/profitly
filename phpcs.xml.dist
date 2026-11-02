@@ -6,6 +6,7 @@
 	<file>.</file>
 
 	<!-- Exclude third-party and generated code. -->
+	<exclude-pattern>tests/stubs/*</exclude-pattern>
 	<exclude-pattern>/vendor/*</exclude-pattern>
 	<exclude-pattern>/vendor-prefixed/*</exclude-pattern>
 	<exclude-pattern>/bin/*</exclude-pattern>

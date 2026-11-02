@@ -4,7 +4,7 @@ Tags: profit, cost of goods, cogs, analytics, woocommerce
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Profitly fixes that. It captures the true cost behind every order and shows you 
 
 = What Profitly does =
 
-* **Cost of Goods (COGS) tracking** — Add your real cost per product and per variation. Bulk-import costs via CSV.
+* **Cost of Goods (COGS) tracking** — Enter your real cost per product and per variation in WooCommerce's built-in Cost field, and bulk-import costs with WooCommerce's product CSV importer.
 * **Real profit per order** — Revenue minus COGS, payment gateway fees, and shipping cost, calculated for every order.
 * **Gross margin at a glance** — See each product's gross margin right in your Products list.
 * **Profit reports** — Today, last 7 days, and last 30 days, with revenue, net profit, order count, and average margin, plus period-over-period comparison.
@@ -88,11 +88,12 @@ When you refund an order, Profitly reduces revenue and the associated cost of go
 
 = After activation =
 
-1. Make sure **WooCommerce** is installed and active (Profitly requires it).
-2. Open the new **Profitly** menu in your admin sidebar.
-3. Go to **Profitly → Settings** and enter your payment gateway fees and shipping costs.
-4. Add a **Cost of Goods** value to your products (on each product's edit screen, or bulk-import via CSV).
-5. Your profit reports will begin populating as new orders come in.
+1. Make sure **WooCommerce** 10.0 or newer is installed and active (Profitly requires it).
+2. Go to **WooCommerce → Settings → Advanced → Features** and turn on **Cost of Goods Sold**.
+3. Open the new **Profitly** menu in your admin sidebar.
+4. Go to **Profitly → Settings** and enter your payment gateway fees and shipping costs.
+5. Add your costs in each product's **Cost** field (on the product's edit screen, or bulk-import with WooCommerce's product CSV importer).
+6. Your profit reports will begin populating as new orders come in.
 
 **Note:** Profit is calculated from the cost of goods recorded at the time an order is placed. For accurate reporting, add your product costs before you start selling.
 
@@ -110,7 +111,7 @@ No. Profitly snapshots each product's cost onto the order at the moment it is pl
 
 No. All calculations happen on your own server, and all data is stored in your own WordPress database. Profitly never sends your financial, order or customer data anywhere.
 
-The only exception is optional anonymous usage data, which is off until you turn it on in Profitly > Settings > General. See "External services" below for exactly what it sends.
+The only exception is optional feedback when you deactivate Profitly, sent only if you click "Submit & Deactivate". See "External services" below for exactly what it sends.
 
 = Is Profitly compatible with High-Performance Order Storage (HPOS)? =
 
@@ -126,7 +127,11 @@ The amount your customer pays for shipping is revenue. The shipping cost in Prof
 
 = Does Profitly handle product variations? =
 
-Yes. You can set a cost of goods for each variation. If a variation has no cost set, Profitly falls back to the parent product's cost.
+Yes. You can set a cost for each variation in WooCommerce's Cost field. A variation with no cost of its own inherits the parent product's cost. WooCommerce's additive option adds the variation's cost on top of the parent's instead.
+
+= I used Profitly before 1.0.4 — what happens to my costs? =
+
+They are copied automatically into WooCommerce's Cost field once the Cost of Goods Sold feature is on. If a product already had a different WooCommerce cost, WooCommerce's value is kept and Profitly lists those products for you to check.
 
 = Can I export my profit data? =
 
@@ -142,30 +147,41 @@ No. Profit calculations for reports run in the admin area, not on your storefron
 
 == External services ==
 
-Profitly can send anonymous usage data to a server run by StandaloneTech (`https://telemetry.standalonetech.com`). **This is opt-in: nothing is sent, and no request is made, unless you tick "Usage data" in Profitly > Settings > General (or press "Allow" on the one-time notice).** You can turn it off at any time, and turning it off also asks the server to delete the data already sent. The "Delete my data" button on the same screen does the same and tells you whether it worked. If you plan to uninstall Profitly, turn it off first.
+Profitly can send deactivation feedback to a server run by StandaloneTech (`https://telemetry.standalonetech.com`). **Data is sent only when you click "Submit & Deactivate" in the popup shown when you deactivate Profitly.** "Skip & Deactivate" and "Cancel" send nothing. Nothing is sent at any other time.
 
-If you allow it, this is sent when you allow it, then once a week:
+The feedback helps us see why people deactivate Profitly and which versions they use, so we can decide what to support and improve.
 
-* a random anonymous site ID (not derived from your site address)
+When you click "Submit & Deactivate", this is sent:
+
+* the reason you selected
+* your optional comment (up to 500 characters). Please don't include personal details in it.
+* the number of days Profitly was active
 * Profitly's version, and your WordPress, PHP and WooCommerce versions
 * your site language (locale) and whether the site is a multisite
 
-If you allow it and then deactivate Profitly, choosing "Submit & Deactivate" in the deactivation window also sends the reason you picked, the optional comment you typed and the number of days Profitly was active. "Skip & Deactivate" and "Cancel" send nothing.
+Profitly never sends your site address, admin email, user names, customers, orders, products, costs or profit figures, and it does not use a site ID.
 
-As with any web request, the server can see your site's IP address. It is used only to rate-limit requests and is not stored; only a salted hash is kept, for up to an hour.
+As with any web request, the server can see the IP address of the server hosting your site. It is used only to rate-limit requests and is not stored; only a salted hash is kept, for up to an hour.
 
-Profitly never sends your site address, admin email, user names, customers, orders, products, costs or profit figures. See the [StandaloneTech privacy policy](https://standalonetech.com/privacy-policy/).
+See the StandaloneTech [privacy policy](https://standalonetech.com/privacy-policy/) and [terms and conditions](https://standalonetech.com/terms-and-conditions/).
 
 == Screenshots ==
 
 1. Profit reports dashboard — revenue, net profit, order count, and average margin, with period-over-period comparison.
-2. Cost of Goods field on the product edit screen.
+2. WooCommerce's Cost field on the product edit screen.
 3. Per-product gross margin column in the Products list.
 4. Per-order profit breakdown showing revenue, COGS, gateway fee, shipping cost, and net profit.
 5. Profit snapshot widget on the WordPress dashboard.
 6. Settings — gateway fees, shipping cost model, and general options.
 
 == Changelog ==
+
+= 1.0.4 (November 2, 2026) =
+* Changed: Profitly now uses WooCommerce's built-in Cost of Goods Sold field instead of its own.
+* New: existing Profitly product costs are copied into WooCommerce's Cost field automatically.
+* Changed: requires WooCommerce 10.0 or newer.
+* Fix: past order costs stay frozen even when WooCommerce recalculates an order.
+* Changed: removed the optional usage data sharing and the weekly ping. Profitly now only asks for optional feedback when you deactivate it, and sends it only if you click Submit & Deactivate. The anonymous site ID and any old usage-data settings are removed from your site automatically.
 
 = 1.0.3 (September 20, 2026) =
 * New: optional, opt-in anonymous usage data and deactivation feedback. Off by default, and turning it off deletes what was already sent; see "External services".
@@ -198,6 +214,9 @@ Profitly never sends your site address, admin email, user names, customers, orde
 * HPOS and block checkout compatibility.
 
 == Upgrade Notice ==
+
+= 1.0.4 =
+Removes optional usage data sharing and the weekly ping; Profitly now sends data only if you click Submit & Deactivate in the deactivation popup.
 
 = 1.0.3 =
 Adds optional, opt-in anonymous usage data (off by default). Nothing is sent unless you allow it.

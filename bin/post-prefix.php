@@ -2,7 +2,7 @@
 /**
  * Runs after Strauss (`composer prefix`).
  *
- * 1. Strauss copies only PHP files, so copy the library's popup/notice assets next to it.
+ * 1. Strauss copies only PHP files, so copy the library's popup assets next to it.
  * 2. Normalise permissions: Strauss creates 0700 directories, which the web server cannot
  *    read, so the copied assets would 403 wherever the build is deployed with modes intact.
  * 3. Pin the library's gettext calls to the literal 'profitly' text domain, so
