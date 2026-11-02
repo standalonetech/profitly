@@ -42,9 +42,11 @@ composer test      # phpunit
 
 If the telemetry library changed, update the prefixed copy first and commit it
 (needs read access to the private `standalonetech/wp-telemetry` repo, e.g. a
-`COMPOSER_AUTH` GitHub token):
+`COMPOSER_AUTH` GitHub token). Delete the old prefixed copy first, because Strauss
+does not remove files the new version dropped:
 
 ```bash
+rm -rf vendor-prefixed/standalonetech/
 composer update standalonetech/wp-telemetry
 composer prefix        # Strauss + assets + text-domain pin + dump-autoload
 git add vendor-prefixed && git commit

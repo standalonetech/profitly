@@ -84,7 +84,7 @@ final class Plugin {
 		( new SettingsRegistry() )->register_hooks();
 		( new SettingsHandler() )->register_hooks();
 
-		// Opt-in anonymous usage data.
+		// Deactivation feedback popup.
 		( new Telemetry() )->register_hooks();
 
 		// Reporting layer.

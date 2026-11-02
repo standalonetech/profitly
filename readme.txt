@@ -110,7 +110,7 @@ No. Profitly snapshots each product's cost onto the order at the moment it is pl
 
 No. All calculations happen on your own server, and all data is stored in your own WordPress database. Profitly never sends your financial, order or customer data anywhere.
 
-The only exception is optional anonymous usage data, which is off until you turn it on in Profitly > Settings > General. See "External services" below for exactly what it sends.
+The only exception is optional feedback when you deactivate Profitly, sent only if you click "Submit & Deactivate". See "External services" below for exactly what it sends.
 
 = Is Profitly compatible with High-Performance Order Storage (HPOS)? =
 
@@ -142,19 +142,23 @@ No. Profit calculations for reports run in the admin area, not on your storefron
 
 == External services ==
 
-Profitly can send anonymous usage data to a server run by StandaloneTech (`https://telemetry.standalonetech.com`). **This is opt-in: nothing is sent, and no request is made, unless you tick "Usage data" in Profitly > Settings > General (or press "Allow" on the one-time notice).** You can turn it off at any time, and turning it off also asks the server to delete the data already sent. The "Delete my data" button on the same screen does the same and tells you whether it worked. If you plan to uninstall Profitly, turn it off first.
+Profitly can send deactivation feedback to a server run by StandaloneTech (`https://telemetry.standalonetech.com`). **Data is sent only when you click "Submit & Deactivate" in the popup shown when you deactivate Profitly.** "Skip & Deactivate" and "Cancel" send nothing. Nothing is sent at any other time.
 
-If you allow it, this is sent when you allow it, then once a week:
+The feedback helps us see why people deactivate Profitly and which versions they use, so we can decide what to support and improve.
 
-* a random anonymous site ID (not derived from your site address)
+When you click "Submit & Deactivate", this is sent:
+
+* the reason you selected
+* your optional comment (up to 500 characters). Please don't include personal details in it.
+* the number of days Profitly was active
 * Profitly's version, and your WordPress, PHP and WooCommerce versions
 * your site language (locale) and whether the site is a multisite
 
-If you allow it and then deactivate Profitly, choosing "Submit & Deactivate" in the deactivation window also sends the reason you picked, the optional comment you typed and the number of days Profitly was active. "Skip & Deactivate" and "Cancel" send nothing.
+Profitly never sends your site address, admin email, user names, customers, orders, products, costs or profit figures, and it does not use a site ID.
 
-As with any web request, the server can see your site's IP address. It is used only to rate-limit requests and is not stored; only a salted hash is kept, for up to an hour.
+As with any web request, the server can see the IP address of the server hosting your site. It is used only to rate-limit requests and is not stored; only a salted hash is kept, for up to an hour.
 
-Profitly never sends your site address, admin email, user names, customers, orders, products, costs or profit figures. See the [StandaloneTech privacy policy](https://standalonetech.com/privacy-policy/).
+See the StandaloneTech [privacy policy](https://standalonetech.com/privacy-policy/) and [terms and conditions](https://standalonetech.com/terms-and-conditions/).
 
 == Screenshots ==
 
@@ -169,6 +173,7 @@ Profitly never sends your site address, admin email, user names, customers, orde
 
 = 1.0.4 (Unreleased) =
 * Development in progress.
+* Changed: removed the optional usage data sharing and the weekly ping. Profitly now only asks for optional feedback when you deactivate it, and sends it only if you click Submit & Deactivate. The anonymous site ID and any old usage-data settings are removed from your site automatically.
 
 = 1.0.3 (September 20, 2026) =
 * New: optional, opt-in anonymous usage data and deactivation feedback. Off by default, and turning it off deletes what was already sent; see "External services".
@@ -201,6 +206,9 @@ Profitly never sends your site address, admin email, user names, customers, orde
 * HPOS and block checkout compatibility.
 
 == Upgrade Notice ==
+
+= 1.0.4 =
+Removes optional usage data sharing and the weekly ping; Profitly now sends data only if you click Submit & Deactivate in the deactivation popup.
 
 = 1.0.3 =
 Adds optional, opt-in anonymous usage data (off by default). Nothing is sent unless you allow it.

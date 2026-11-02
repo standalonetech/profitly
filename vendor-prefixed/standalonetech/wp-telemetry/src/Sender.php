@@ -5,7 +5,7 @@
  * @package StandaloneTech\Telemetry
  *
  * @license GPL-2.0-or-later
- * Modified by profitly on 20-September-2026 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by profitly on 02-November-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace Profitly\Vendor\StandaloneTech\Telemetry;
@@ -13,12 +13,9 @@ namespace Profitly\Vendor\StandaloneTech\Telemetry;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Every request funnels through send(), which refuses unless consent is 'yes'
- * (except the user-initiated erasure request, see send()).
+ * Sends the deactivate event, the only event that exists.
  */
 final class Sender {
-
-	private const EVENTS = array( 'optin', 'ping', 'deactivate', 'delete' );
 
 	/**
 	 * Owning client.
@@ -37,75 +34,24 @@ final class Sender {
 	}
 
 	/**
-	 * Send the optin event.
+	 * POST the deactivate event to {server_url}/event.
 	 *
-	 * @return bool
-	 */
-	public function optin(): bool {
-		return $this->send( 'optin', $this->client->collector()->collect( 'optin' ) );
-	}
-
-	/**
-	 * Send the weekly ping.
-	 *
-	 * @return bool
-	 */
-	public function ping(): bool {
-		return $this->send( 'ping', $this->client->collector()->collect( 'ping' ) );
-	}
-
-	/**
-	 * Send the deactivate event (only ever called after "Submit & Deactivate").
+	 * Only ever called after "Submit & Deactivate", which is the user's explicit consent.
 	 *
 	 * @param string $reason_code Validated reason code.
 	 * @param string $reason_text Optional free text.
-	 * @return bool
+	 * @return bool False when the request could not be started.
 	 */
 	public function deactivate( string $reason_code, string $reason_text ): bool {
-		return $this->send( 'deactivate', $this->client->collector()->collect_deactivation( $reason_code, $reason_text ) );
-	}
-
-	/**
-	 * Ask the server to delete this site's data. Blocking, so the caller knows it worked.
-	 *
-	 * @return bool True when the server confirmed with a 2xx.
-	 */
-	public function delete(): bool {
-		$payload = $this->client->collector()->collect( 'delete' );
-		if ( empty( $payload['site_id'] ) ) {
-			return false;
-		}
-
-		return $this->send( 'delete', $payload, true );
-	}
-
-	/**
-	 * POST a payload to {server_url}/event (with event_type), or {server_url}/delete.
-	 *
-	 * @param string               $event    Event name.
-	 * @param array<string, mixed> $payload  Payload.
-	 * @param bool                 $blocking Wait for the response.
-	 * @return bool False when refused (no consent) or the request failed.
-	 */
-	private function send( string $event, array $payload, bool $blocking = false ): bool {
-		// Erasure is the one request that does not need consent: it only exists because the user once
-		// opted in (it needs a site ID), it is triggered by their explicit click, and it sends just the
-		// site ID and plugin slug. Every other event still refuses without consent.
-		if ( ! in_array( $event, self::EVENTS, true ) || ( 'delete' !== $event && ! $this->client->consent()->is_granted() ) ) {
-			return false;
-		}
-
-		$route = 'delete' === $event ? 'delete' : 'event';
-		if ( 'delete' !== $event ) {
-			// Added after the developer filter, so it can never be stripped.
-			$payload['event_type'] = $event;
-		}
+		$payload = $this->client->collector()->collect_deactivation( $reason_code, $reason_text );
+		// Added after the developer filter, so it can never be stripped.
+		$payload['event_type'] = 'deactivate';
 
 		$response = wp_remote_post(
-			$this->client->config( 'server_url' ) . '/' . $route,
+			$this->client->config( 'server_url' ) . '/event',
 			array(
 				'timeout'     => 5,
-				'blocking'    => $blocking,
+				'blocking'    => false,
 				'redirection' => 0,
 				'sslverify'   => true,
 				// The default user agent contains the site URL, which must never be sent.
@@ -115,15 +61,6 @@ final class Sender {
 			)
 		);
 
-		if ( is_wp_error( $response ) ) {
-			return false;
-		}
-
-		if ( ! $blocking ) {
-			return true;
-		}
-
-		$code = (int) wp_remote_retrieve_response_code( $response );
-		return $code >= 200 && $code < 300;
+		return ! is_wp_error( $response );
 	}
 }

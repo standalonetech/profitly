@@ -11,7 +11,6 @@ namespace Profitly\Settings;
 
 use Profitly\Admin\Menu;
 use Profitly\Constants;
-use Profitly\Telemetry\Telemetry;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -82,12 +81,6 @@ final class SettingsPage {
 		submit_button();
 
 		echo '</form>';
-
-		// Its own form, so it must sit outside the settings form (forms cannot nest).
-		$telemetry = 'general' === $current ? Telemetry::client() : null;
-		if ( null !== $telemetry ) {
-			$telemetry->privacy()->render_delete_button();
-		}
 
 		echo '</div>';
 	}

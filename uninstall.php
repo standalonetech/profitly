@@ -15,8 +15,8 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 }
 
-// Telemetry options and its cron event are removed unconditionally: they hold the site's
-// consent choice and anonymous ID, not store data.
+// Telemetry options are removed unconditionally, along with any 1.x options and cron
+// event: they hold the popup's local bookkeeping, not store data.
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 	\Profitly\Vendor\StandaloneTech\Telemetry\Client::cleanup( 'profitly' );

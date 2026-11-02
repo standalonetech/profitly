@@ -9,8 +9,6 @@ declare( strict_types=1 );
 
 namespace Profitly\Settings\Tabs;
 
-use Profitly\Telemetry\Telemetry;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -55,14 +53,6 @@ final class GeneralTab implements TabInterface {
 		echo '<p class="description">' . esc_html__( 'When enabled, uninstalling Profitly will permanently remove all COGS data, settings, and order profit snapshots. This cannot be undone.', 'profitly' ) . '</p>';
 		echo '</td>';
 		echo '</tr>';
-
-		// Anonymous usage data: opt-in, unchecked until the user allows it.
-		$telemetry = Telemetry::client();
-		if ( null !== $telemetry ) {
-			echo '<tr><th scope="row">' . esc_html__( 'Usage data', 'profitly' ) . '</th><td>';
-			$telemetry->consent()->render_checkbox();
-			echo '</td></tr>';
-		}
 
 		echo '</tbody></table>';
 	}

@@ -23,6 +23,7 @@
 		var support       = overlay.querySelector( '.sts-telemetry-support' );
 		var deactivateUrl = '';
 		var opener        = null;
+		var sending       = false;
 
 		function selected() {
 			return overlay.querySelector( 'input[name="sts_telemetry_reason"]:checked' );
@@ -66,7 +67,7 @@
 			'change',
 			function () {
 				var reason      = selected();
-				submit.disabled = ! reason;
+				submit.disabled = ! reason || sending;
 				if ( support ) {
 					support.hidden = ! reason || 'not_working' !== reason.value;
 				}
@@ -96,6 +97,7 @@
 					return;
 				}
 
+				sending         = true;
 				submit.disabled = true;
 				body.append( 'action', overlay.getAttribute( 'data-action' ) );
 				body.append( 'nonce', overlay.getAttribute( 'data-nonce' ) );

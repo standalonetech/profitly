@@ -2,7 +2,7 @@
 /**
  * @license GPL-2.0-or-later
  *
- * Modified by profitly on 20-September-2026 using {@see https://github.com/BrianHenryIE/strauss}.
+ * Modified by profitly on 02-November-2026 using {@see https://github.com/BrianHenryIE/strauss}.
  */
 /**
  * Deactivation feedback popup (markup and asset loading).
@@ -15,9 +15,8 @@ namespace Profitly\Vendor\StandaloneTech\Telemetry;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Loads on plugins.php only, for users who can deactivate plugins, and only
- * while consent is 'yes' (with no consent there is nothing it may send).
- * Behaviour lives in assets/js/popup.js.
+ * Loads on plugins.php only (site and network admin), for users who can
+ * deactivate plugins. Behaviour lives in assets/js/popup.js.
  */
 final class Popup {
 
@@ -90,9 +89,7 @@ final class Popup {
 	 * @return bool
 	 */
 	private function should_load(): bool {
-		return current_user_can( 'activate_plugins' )
-			&& $this->client->consent()->is_granted()
-			&& '' !== $this->client->assets_url();
+		return current_user_can( 'activate_plugins' ) && '' !== $this->client->assets_url();
 	}
 
 	/**
@@ -161,7 +158,8 @@ final class Popup {
 					<button type="button" class="button sts-telemetry-cancel"><?php esc_html_e( 'Cancel', 'profitly' ); ?></button>
 				</div>
 				<p class="sts-telemetry-note">
-					<?php esc_html_e( 'Submitting sends your reason and comment, days active, an anonymous site ID, plugin, WordPress and PHP versions and your locale. Never your site address, email or store data. Skip and Cancel send nothing.', 'profitly' ); ?>
+					<?php esc_html_e( 'Submit sends your reason and comment, the number of days the plugin was active, the plugin name and version, the WordPress and PHP versions, the WooCommerce version (if active), your site language and whether the site is a multisite. Never your site address, email, or user or store data. Skip and Cancel send nothing.', 'profitly' ); ?>
+					<?php esc_html_e( "Please don't include personal details in the comment.", 'profitly' ); ?>
 					<a href="<?php echo esc_url( $this->client->config( 'privacy_url' ) ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'Privacy policy', 'profitly' ); ?></a>
 				</p>
 			</div>
