@@ -20,7 +20,7 @@ Profitly fixes that. It captures the true cost behind every order and shows you 
 
 = What Profitly does =
 
-* **Cost of Goods (COGS) tracking** — Add your real cost per product and per variation. Bulk-import costs via CSV.
+* **Cost of Goods (COGS) tracking** — Enter your real cost per product and per variation in WooCommerce's built-in Cost field, and bulk-import costs with WooCommerce's product CSV importer.
 * **Real profit per order** — Revenue minus COGS, payment gateway fees, and shipping cost, calculated for every order.
 * **Gross margin at a glance** — See each product's gross margin right in your Products list.
 * **Profit reports** — Today, last 7 days, and last 30 days, with revenue, net profit, order count, and average margin, plus period-over-period comparison.
@@ -88,11 +88,12 @@ When you refund an order, Profitly reduces revenue and the associated cost of go
 
 = After activation =
 
-1. Make sure **WooCommerce** is installed and active (Profitly requires it).
-2. Open the new **Profitly** menu in your admin sidebar.
-3. Go to **Profitly → Settings** and enter your payment gateway fees and shipping costs.
-4. Add a **Cost of Goods** value to your products (on each product's edit screen, or bulk-import via CSV).
-5. Your profit reports will begin populating as new orders come in.
+1. Make sure **WooCommerce** 10.0 or newer is installed and active (Profitly requires it).
+2. Go to **WooCommerce → Settings → Advanced → Features** and turn on **Cost of Goods Sold**.
+3. Open the new **Profitly** menu in your admin sidebar.
+4. Go to **Profitly → Settings** and enter your payment gateway fees and shipping costs.
+5. Add your costs in each product's **Cost** field (on the product's edit screen, or bulk-import with WooCommerce's product CSV importer).
+6. Your profit reports will begin populating as new orders come in.
 
 **Note:** Profit is calculated from the cost of goods recorded at the time an order is placed. For accurate reporting, add your product costs before you start selling.
 
@@ -126,7 +127,11 @@ The amount your customer pays for shipping is revenue. The shipping cost in Prof
 
 = Does Profitly handle product variations? =
 
-Yes. You can set a cost of goods for each variation. If a variation has no cost set, Profitly falls back to the parent product's cost.
+Yes. You can set a cost for each variation in WooCommerce's Cost field. A variation with no cost of its own inherits the parent product's cost. WooCommerce's additive option adds the variation's cost on top of the parent's instead.
+
+= I used Profitly before 1.0.4 — what happens to my costs? =
+
+They are copied automatically into WooCommerce's Cost field once the Cost of Goods Sold feature is on. If a product already had a different WooCommerce cost, WooCommerce's value is kept and Profitly lists those products for you to check.
 
 = Can I export my profit data? =
 
@@ -163,7 +168,7 @@ See the StandaloneTech [privacy policy](https://standalonetech.com/privacy-polic
 == Screenshots ==
 
 1. Profit reports dashboard — revenue, net profit, order count, and average margin, with period-over-period comparison.
-2. Cost of Goods field on the product edit screen.
+2. WooCommerce's Cost field on the product edit screen.
 3. Per-product gross margin column in the Products list.
 4. Per-order profit breakdown showing revenue, COGS, gateway fee, shipping cost, and net profit.
 5. Profit snapshot widget on the WordPress dashboard.
@@ -172,7 +177,10 @@ See the StandaloneTech [privacy policy](https://standalonetech.com/privacy-polic
 == Changelog ==
 
 = 1.0.4 (Unreleased) =
-* Development in progress.
+* Changed: Profitly now uses WooCommerce's built-in Cost of Goods Sold field instead of its own.
+* New: existing Profitly product costs are copied into WooCommerce's Cost field automatically.
+* Changed: requires WooCommerce 10.0 or newer.
+* Fix: past order costs stay frozen even when WooCommerce recalculates an order.
 * Changed: removed the optional usage data sharing and the weekly ping. Profitly now only asks for optional feedback when you deactivate it, and sends it only if you click Submit & Deactivate. The anonymous site ID and any old usage-data settings are removed from your site automatically.
 
 = 1.0.3 (September 20, 2026) =

@@ -10,10 +10,12 @@ declare( strict_types=1 );
 namespace Profitly;
 
 use Profitly\Admin\Assets;
+use Profitly\Admin\CostSourceNotice;
 use Profitly\Admin\Menu;
 use Profitly\Admin\OrderProfitMetaBox;
 use Profitly\Admin\ProductFields;
 use Profitly\Admin\ProductListColumn;
+use Profitly\COGS\LegacyCostMigration;
 use Profitly\COGS\OrderLineCOGS;
 use Profitly\COGS\ProductCOGS;
 use Profitly\Compatibility\HPOS;
@@ -72,6 +74,8 @@ final class Plugin {
 		( new ProductCOGS() )->register_hooks();
 		( new OrderLineCOGS() )->register_hooks();
 		( new ProductFields() )->register_hooks();
+		( new LegacyCostMigration() )->register_hooks();
+		( new CostSourceNotice() )->register_hooks();
 
 		// Profit calculation layer.
 		( new OrderSnapshot() )->register_hooks();

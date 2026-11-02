@@ -6,6 +6,7 @@ parameters:
 		- profitly.php
 	scanFiles:
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
+		- tests/stubs/action-scheduler.php
 	# WooCommerce stubs declare many returns as non-nullable, but at real runtime
 	# (early load, edge cases) they can be null. Keep our defensive guards instead
 	# of trusting the stub/PHPDoc types as certain.

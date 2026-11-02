@@ -10,6 +10,7 @@ declare( strict_types=1 );
 namespace Profitly\Settings;
 
 use Profitly\Admin\Menu;
+use Profitly\COGS\LegacyCostMigration;
 use Profitly\Constants;
 
 defined( 'ABSPATH' ) || exit;
@@ -81,6 +82,11 @@ final class SettingsPage {
 		submit_button();
 
 		echo '</form>';
+
+		// Has its own form, so must sit outside the settings form (forms cannot nest).
+		if ( 'general' === $current ) {
+			LegacyCostMigration::render_copy_again_button();
+		}
 
 		echo '</div>';
 	}

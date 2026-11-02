@@ -104,6 +104,25 @@ final class Menu {
 	}
 
 	/**
+	 * Whether the current admin screen is one of Profitly's own pages.
+	 *
+	 * @return bool
+	 */
+	public static function is_profitly_screen(): bool {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+		return null !== $screen && in_array(
+			$screen->id,
+			array(
+				'toplevel_page_' . self::SLUG,
+				self::SLUG . '_page_' . self::TARGET_SLUG,
+				self::SLUG . '_page_' . self::SETTINGS_SLUG,
+			),
+			true
+		);
+	}
+
+	/**
 	 * Canonical URL of the Reports page.
 	 *
 	 * @return string
