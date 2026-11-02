@@ -176,7 +176,7 @@ See the StandaloneTech [privacy policy](https://standalonetech.com/privacy-polic
 
 == Changelog ==
 
-= 1.0.4 (Unreleased) =
+= 1.0.4 (November 2, 2026) =
 * Changed: Profitly now uses WooCommerce's built-in Cost of Goods Sold field instead of its own.
 * New: existing Profitly product costs are copied into WooCommerce's Cost field automatically.
 * Changed: requires WooCommerce 10.0 or newer.
